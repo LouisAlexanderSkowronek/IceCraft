@@ -50,7 +50,7 @@ int main()
 
     glEnable(GL_DEPTH_TEST);
 
-    unsigned block_shader_program = build_shader_program("../shaders/block_vertex_shader.glsl", "../shaders/block_fragment_shader.glsl");
+    unsigned world_shader_program = build_shader_program("../shaders/world_vertex_shader.glsl", "../shaders/world_fragment_shader.glsl");
 
     unsigned coord_axes_shader_program = build_shader_program("../shaders/coord_axes_vertex_shader.glsl", "../shaders/coord_axes_fragment_shader.glsl");
 
@@ -65,15 +65,10 @@ int main()
     struct World world;
     init_world(&world, 16);
 
-    for (float x = 0; x < 5; x+=2)
+    for (float i = 0; i < 4; i++)
     {
-        for (float z = 0; z < 3; z+=2)
-        {
-            add_block(x, 0, z, &world);
-        }
+        add_block(2*i, 0, 0, &world);
     }
-
-    add_block(0, 2, 0, &world);
 
     struct CoordinateAxes coordinate_axes;
     generateCoordinateAxes(&coordinate_axes);
@@ -84,9 +79,9 @@ int main()
     GLuint coord_axes_VBO, coord_axes_VAO;
     generate_coord_axes_vao_and_vbo(&coord_axes_VAO, &coord_axes_VBO, &coordinate_axes);
 
-    const GLuint block_model_location = glGetUniformLocation(block_shader_program, "model");
-    const GLuint block_view_location  = glGetUniformLocation(block_shader_program, "view");
-    const GLuint block_projection_location = glGetUniformLocation(block_shader_program, "projection");
+    const GLuint world_model_location = glGetUniformLocation(world_shader_program, "model");
+    const GLuint world_view_location  = glGetUniformLocation(world_shader_program, "view");
+    const GLuint world_projection_location = glGetUniformLocation(world_shader_program, "projection");
 
     const GLuint coord_axes_model_location = glGetUniformLocation(coord_axes_shader_program, "model");
     const GLuint coord_axes_view_location  = glGetUniformLocation(coord_axes_shader_program, "view");
@@ -125,7 +120,7 @@ int main()
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        glUseProgram(block_shader_program);
+        glUseProgram(world_shader_program);
 
         vec3 camera_target;
         glm_vec3_add(camera.position, camera.front, camera_target);
@@ -133,9 +128,9 @@ int main()
 
         mat4 model = GLM_MAT4_IDENTITY_INIT;
 
-        glUniformMatrix4fv(block_model_location, 1, GL_FALSE, (float*)model);
-        glUniformMatrix4fv(block_view_location, 1, GL_FALSE, (float*)view);
-        glUniformMatrix4fv(block_projection_location, 1, GL_FALSE, (float*)projection);
+        glUniformMatrix4fv(world_model_location, 1, GL_FALSE, (float*)model);
+        glUniformMatrix4fv(world_view_location, 1, GL_FALSE, (float*)view);
+        glUniformMatrix4fv(world_projection_location, 1, GL_FALSE, (float*)projection);
 
         glBindTexture(GL_TEXTURE_2D, texture);
         glBindVertexArray(world_VAO);
@@ -166,7 +161,7 @@ int main()
     glDeleteVertexArrays(1, &coord_axes_VAO);
     glDeleteBuffers(1, &coord_axes_VBO);
 
-    glDeleteProgram(block_shader_program);
+    glDeleteProgram(world_shader_program);
     glDeleteProgram(coord_axes_shader_program);
 
     free(world.vertices);
