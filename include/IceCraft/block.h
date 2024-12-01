@@ -6,7 +6,7 @@
 #include <stdio.h>
 
 
-#define BLOCK_N_VERTICES 18
+#define BLOCK_N_VERTICES 24
 #define BLOCK_VERTICES_SIZE (BLOCK_N_VERTICES * sizeof(struct BlockVertex))
 
 struct Block

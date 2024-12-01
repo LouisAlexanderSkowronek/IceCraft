@@ -191,7 +191,44 @@ struct Block generate_block()
     block.vertices[17].u = 0.0f;
     block.vertices[17].v = 1.0f;
 
-    
+    // Top, A
+    block.vertices[18].x = -1;
+    block.vertices[18].y = 1;
+    block.vertices[18].z = 1;
+    block.vertices[18].u = 0.0f;
+    block.vertices[18].v = 1.0f;
+
+    // B
+    block.vertices[19].x = -1;
+    block.vertices[19].y = 1;
+    block.vertices[19].z = -1;
+    block.vertices[19].u = 0.0f;
+    block.vertices[19].v = 0.0f;
+
+    // C
+    block.vertices[20].x = 1;
+    block.vertices[20].y = 1;
+    block.vertices[20].z = -1;
+    block.vertices[20].u = 1.0f;
+    block.vertices[20].v = 0.0f;
+
+    block.vertices[21].x=1;
+    block.vertices[21].y=1;
+    block.vertices[21].z=-1;
+    block.vertices[21].u=1;
+    block.vertices[21].v=0;
+
+    block.vertices[22].x=1;
+    block.vertices[22].y=1;
+    block.vertices[22].z=1;
+    block.vertices[22].u=1;
+    block.vertices[22].v=1;
+
+    block.vertices[23].x = -1;
+    block.vertices[23].y = 1;
+    block.vertices[23].z = 1;
+    block.vertices[23].u = 0.0f;
+    block.vertices[23].v = 1.0f;    
 
 
     debug_check_vertices(block.vertices);
