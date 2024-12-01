@@ -14,6 +14,7 @@
 #include "IceCraft/block_vertex.h"
 #include "IceCraft/block.h"
 #include "IceCraft/coordinate_axes.h"
+#include "IceCraft/world.h"
 
 
 #define WINDOW_WIDTH 800
@@ -29,7 +30,7 @@ GLFWwindow* create_window(unsigned width, unsigned height, const char *title);
 
 unsigned load_jpg_texture(const char *filename);
 
-void generate_block_vao_and_vbo(unsigned *VAO_ptr, unsigned *VBO_ptr, struct Block *block_ptr);
+void generate_world_vao_and_vbo(unsigned *VAO_ptr, unsigned *VBO_ptr, struct World *world_ptr);
 
 void generate_coord_axes_vao_and_vbo(unsigned *VAO_ptr, unsigned *VBO_ptr, struct CoordinateAxes *coord_axes_ptr);
 
@@ -38,7 +39,6 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 unsigned build_shader_program(const char *vertex_shader_filepath, const char *fragment_shader_filepath);
 
 void processInput(GLFWwindow *window, struct Camera *camera, int *show_coordinate_axes, int *c_key_is_blocked, const float delta);
-
 
 int main()
 {
@@ -62,13 +62,24 @@ int main()
     int show_coordinate_axes = 0;
     int c_key_is_blocked = 0;
 
-    struct Block block = generate_block();
+    struct World world;
+    init_world(&world, 16);
+
+    for (float x = 0; x < 5; x+=2)
+    {
+        for (float z = 0; z < 3; z+=2)
+        {
+            add_block(x, 0, z, &world);
+        }
+    }
+
+    add_block(0, 2, 0, &world);
 
     struct CoordinateAxes coordinate_axes;
     generateCoordinateAxes(&coordinate_axes);
 
-    GLuint block_VBO, block_VAO;
-    generate_block_vao_and_vbo(&block_VAO, &block_VBO, &block);
+    GLuint world_VBO, world_VAO;
+    generate_world_vao_and_vbo(&world_VAO, &world_VBO, &world);
 
     GLuint coord_axes_VBO, coord_axes_VAO;
     generate_coord_axes_vao_and_vbo(&coord_axes_VAO, &coord_axes_VBO, &coordinate_axes);
@@ -127,8 +138,8 @@ int main()
         glUniformMatrix4fv(block_projection_location, 1, GL_FALSE, (float*)projection);
 
         glBindTexture(GL_TEXTURE_2D, texture);
-        glBindVertexArray(block_VAO);
-        glDrawArrays(GL_TRIANGLES, 0, BLOCK_N_VERTICES);
+        glBindVertexArray(world_VAO);
+        glDrawArrays(GL_TRIANGLES, 0, world.placed_blocks*BLOCK_N_VERTICES);
 
 
         if (show_coordinate_axes)
@@ -149,8 +160,8 @@ int main()
         frames_since_last_update++;
     }
 
-    glDeleteVertexArrays(1, &block_VAO);
-    glDeleteBuffers(1, &block_VBO);
+    glDeleteVertexArrays(1, &world_VAO);
+    glDeleteBuffers(1, &world_VBO);
 
     glDeleteVertexArrays(1, &coord_axes_VAO);
     glDeleteBuffers(1, &coord_axes_VBO);
@@ -158,7 +169,7 @@ int main()
     glDeleteProgram(block_shader_program);
     glDeleteProgram(coord_axes_shader_program);
 
-    free(block.vertices);
+    free(world.vertices);
 
     glfwTerminate();
     return 0;
@@ -246,7 +257,7 @@ unsigned load_jpg_texture(const char *filename)
 }
 
 
-void generate_block_vao_and_vbo(unsigned *VAO_ptr, unsigned *VBO_ptr, struct Block *block_ptr)
+void generate_world_vao_and_vbo(unsigned *VAO_ptr, unsigned *VBO_ptr, struct World *world_ptr)
 {
     // Generate and bind the VAO
     glGenVertexArrays(1, VAO_ptr);
@@ -255,7 +266,7 @@ void generate_block_vao_and_vbo(unsigned *VAO_ptr, unsigned *VBO_ptr, struct Blo
     // Generate and bind VBO
     glGenBuffers(1, VBO_ptr);
     glBindBuffer(GL_ARRAY_BUFFER, *VBO_ptr);
-    glBufferData(GL_ARRAY_BUFFER, BLOCK_VERTICES_SIZE, block_ptr->vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, world_ptr->placed_blocks*BLOCK_VERTICES_SIZE, world_ptr->vertices, GL_STATIC_DRAW);
 
     // Set vertex attribute pointers
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(struct BlockVertex), (GLvoid*)0);  // Position

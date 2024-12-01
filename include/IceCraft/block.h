@@ -15,4 +15,4 @@ struct Block
 };
 
 
-struct Block generate_block();
+struct Block generate_block(float x, float y, float z, struct BlockVertex *vertices);
