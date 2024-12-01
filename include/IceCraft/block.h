@@ -15,4 +15,4 @@ struct Block
 };
 
 
-struct Block generate_block(float x, float y, float z, float size);
+struct Block generate_block();

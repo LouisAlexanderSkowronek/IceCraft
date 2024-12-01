@@ -1,5 +1,7 @@
 #include "IceCraft/block.h"
 
+#include "IceCraft/point_vertex.h"
+
 #include <math.h>
 
 static void debug_init_vertices(struct BlockVertex *vertices);
@@ -7,7 +9,7 @@ static void debug_init_vertices(struct BlockVertex *vertices);
 static void debug_check_vertices(const struct BlockVertex *vertices);
 
 
-struct Block generate_block(float x, float y, float z, float size)
+struct Block generate_block()
 {
     struct Block block;
     block.vertices = (struct BlockVertex*) malloc(BLOCK_VERTICES_SIZE);
@@ -17,8 +19,6 @@ struct Block generate_block(float x, float y, float z, float size)
         fprintf(stderr, "Couldn't allocate %lu bytes for block vertices!\n", BLOCK_VERTICES_SIZE);
         exit(1);
     }
-
-    const float half_size = size / 2.0f;
 
     debug_init_vertices(block.vertices);
 
@@ -151,6 +151,47 @@ struct Block generate_block(float x, float y, float z, float size)
 
 
     /* **************** Quietschie-Bereich endet hier! **************** */
+
+    // A, unteres Dreieck, unten
+    block.vertices[12].x = -1;
+    block.vertices[12].y = -1;
+    block.vertices[12].z = 1;
+    block.vertices[12].u = 0.0f;
+    block.vertices[12].v = 1.0f;
+
+    // B
+    block.vertices[13].x = -1;
+    block.vertices[13].y = -1;
+    block.vertices[13].z = -1;
+    block.vertices[13].u = 0.0f;
+    block.vertices[13].v = 0.0f;
+
+    // C
+    block.vertices[14].x = 1;
+    block.vertices[14].y = -1;
+    block.vertices[14].z = -1;
+    block.vertices[14].u = 1.0f;
+    block.vertices[14].v = 0.0f;
+
+    block.vertices[15].x=1;
+    block.vertices[15].y=-1;
+    block.vertices[15].z=-1;
+    block.vertices[15].u=1;
+    block.vertices[15].v=0;
+
+    block.vertices[16].x=1;
+    block.vertices[16].y=-1;
+    block.vertices[16].z=1;
+    block.vertices[16].u=1;
+    block.vertices[16].v=1;
+
+    block.vertices[17].x = -1;
+    block.vertices[17].y = -1;
+    block.vertices[17].z = 1;
+    block.vertices[17].u = 0.0f;
+    block.vertices[17].v = 1.0f;
+
+    
 
 
     debug_check_vertices(block.vertices);

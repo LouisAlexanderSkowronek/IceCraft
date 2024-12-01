@@ -62,7 +62,7 @@ int main()
     int show_coordinate_axes = 0;
     int c_key_is_blocked = 0;
 
-    struct Block block = generate_block(0.0f, 0.0f, 0.0f, 1.0f);
+    struct Block block = generate_block();
 
     struct CoordinateAxes coordinate_axes;
     generateCoordinateAxes(&coordinate_axes);
