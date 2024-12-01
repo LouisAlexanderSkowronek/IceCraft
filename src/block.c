@@ -1,7 +1,5 @@
 #include "IceCraft/block.h"
 
-#include "IceCraft/point_vertex.h"
-
 #include <math.h>
 
 static void debug_init_vertices(struct BlockVertex *vertices);
@@ -228,7 +226,85 @@ struct Block generate_block()
     block.vertices[23].y = 1;
     block.vertices[23].z = 1;
     block.vertices[23].u = 0.0f;
-    block.vertices[23].v = 1.0f;    
+    block.vertices[23].v = 1.0f;
+
+    // Left, A
+    block.vertices[24].x = -1;
+    block.vertices[24].y = 1;
+    block.vertices[24].z = -1;
+    block.vertices[24].u = 0.0f;
+    block.vertices[24].v = 1.0f;
+
+    // B
+    block.vertices[25].x = -1;
+    block.vertices[25].y = -1;
+    block.vertices[25].z = -1;
+    block.vertices[25].u = 0.0f;
+    block.vertices[25].v = 0.0f;
+
+    // C
+    block.vertices[26].x = -1;
+    block.vertices[26].y = -1;
+    block.vertices[26].z = 1;
+    block.vertices[26].u = 1.0f;
+    block.vertices[26].v = 0.0f;
+
+    block.vertices[27].x=-1;
+    block.vertices[27].y=1;
+    block.vertices[27].z=-1;
+    block.vertices[27].u=1;
+    block.vertices[27].v=0;
+
+    block.vertices[28].x=-1;
+    block.vertices[28].y=1;
+    block.vertices[28].z=1;
+    block.vertices[28].u=1;
+    block.vertices[28].v=1;
+
+    block.vertices[29].x = -1;
+    block.vertices[29].y = -1;
+    block.vertices[29].z = 1;
+    block.vertices[29].u = 0.0f;
+    block.vertices[29].v = 1.0f;
+
+    // Right, A
+    block.vertices[30].x = 1;
+    block.vertices[30].y = 1;
+    block.vertices[30].z = -1;
+    block.vertices[30].u = 0.0f;
+    block.vertices[30].v = 1.0f;
+
+    // B
+    block.vertices[31].x = 1;
+    block.vertices[31].y = -1;
+    block.vertices[31].z = -1;
+    block.vertices[31].u = 0.0f;
+    block.vertices[31].v = 0.0f;
+
+    // C
+    block.vertices[32].x = 1;
+    block.vertices[32].y = -1;
+    block.vertices[32].z = 1;
+    block.vertices[32].u = 1.0f;
+    block.vertices[32].v = 0.0f;
+
+    block.vertices[33].x=1;
+    block.vertices[33].y=1;
+    block.vertices[33].z=-1;
+    block.vertices[33].u=1;
+    block.vertices[33].v=0;
+
+    block.vertices[34].x=1;
+    block.vertices[34].y=1;
+    block.vertices[34].z=1;
+    block.vertices[34].u=1;
+    block.vertices[34].v=1;
+
+    block.vertices[35].x = 1;
+    block.vertices[35].y = -1;
+    block.vertices[35].z = 1;
+    block.vertices[35].u = 0.0f;
+    block.vertices[35].v = 1.0f; 
 
 
     debug_check_vertices(block.vertices);

@@ -54,7 +54,7 @@ int main()
 
     unsigned coord_axes_shader_program = build_shader_program("../shaders/coord_axes_vertex_shader.glsl", "../shaders/coord_axes_fragment_shader.glsl");
 
-    unsigned texture = load_jpg_texture("../assets/textures/ice_cheese.jpg");
+    unsigned texture = load_jpg_texture("../assets/textures/dirt.jpg");
 
     struct Camera camera;
     init_camera(&camera);
