@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "math.h": "c",
+        "glad.h": "c",
+        "random": "c",
+        "glfw3.h": "c",
+        "camera.h": "c",
+        "block_vertex.h": "c"
+    }
+}
