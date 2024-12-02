@@ -2,20 +2,14 @@
 
 #include <math.h>
 
-static void debug_init_vertices(struct BlockVertex *vertices);
-
-static void debug_check_vertices(const struct BlockVertex *vertices);
+#include "IceCraft/point.h"
 
 
-struct Block generate_block(float x, float y, float z, struct BlockVertex *vertices)
+struct Block generate_block(float x, float y, float z, unsigned texture_id, struct BlockVertex *vertices)
 {
     struct Block block;
+    block.texture_id = texture_id;
     block.vertices = vertices;
-
-    debug_init_vertices(vertices);
-
-
-    /* **************** Quietschie-Bereich beginnt hier! **************** */
 
 
     // Rückseite, unteres Dreieck
@@ -302,69 +296,10 @@ struct Block generate_block(float x, float y, float z, struct BlockVertex *verti
 
     for (unsigned i = 0; i < BLOCK_N_VERTICES; i++)
     {
-        vertices[i].x += x;
-        vertices[i].y += y;
-        vertices[i].z += z;
+        vertices[i].x = vertices[i].x/2.0f + x;
+        vertices[i].y = vertices[i].y/2.0f + y;
+        vertices[i].z = vertices[i].z/2.0f + z;
     }
-
-
-    debug_check_vertices(vertices);
 
     return block;
-}
-
-
-static void debug_init_vertices(struct BlockVertex *vertices)
-{
-    for (unsigned i = 0; i < BLOCK_N_VERTICES; i++)
-    {
-        vertices[i].x = NAN;
-        vertices[i].y = NAN;
-        vertices[i].z = NAN;
-        vertices[i].u = NAN;
-        vertices[i].v = NAN;
-    }
-}
-
-
-static void debug_check_vertices(const struct BlockVertex *vertices)
-{
-    int error_occured = 0;
-    for (unsigned i = 0; i < BLOCK_N_VERTICES; i++)
-    {
-        if (vertices[i].x != vertices[i].x)
-        {
-            fprintf(stderr, "x Attribut von BlockVertex mit Index %u nicht initialisiert!\n\n", i);
-            error_occured = 1;
-        }
-
-        if (vertices[i].y != vertices[i].y)
-        {
-            fprintf(stderr, "y Attribut von BlockVertex mit Index %u nicht initialisiert!\n\n", i);
-            error_occured = 1;
-        }
-
-        if (vertices[i].z != vertices[i].z)
-        {
-            fprintf(stderr, "z Attribut von BlockVertex mit Index %u nicht initialisiert!\n\n", i);
-            error_occured = 1;
-        }
-
-        if (vertices[i].u != vertices[i].u)
-        {
-            fprintf(stderr, "u Attribut von BlockVertex mit Index %u nicht initialisiert!\n\n", i);
-            error_occured = 1;
-        }
-
-        if (vertices[i].v != vertices[i].v)
-        {
-            fprintf(stderr, "v Attribut von BlockVertex mit Index %u nicht initialisiert!\n\n", i);
-            error_occured = 1;
-        }
-
-        if (error_occured)
-        {
-            exit(1);
-        }
-    }
 }

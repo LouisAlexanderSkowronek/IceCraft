@@ -20,6 +20,7 @@
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 800
 #define WINDOW_TITLE "IceCraft"
+#define N_TEXTURES 6
 
 
 void init_glfw();
@@ -54,7 +55,13 @@ int main()
 
     unsigned coord_axes_shader_program = build_shader_program("../shaders/coord_axes_vertex_shader.glsl", "../shaders/coord_axes_fragment_shader.glsl");
 
-    unsigned texture = load_jpg_texture("../assets/textures/dirt.jpg");
+    unsigned textures[N_TEXTURES];
+    textures[0] = load_jpg_texture("../assets/textures/dirt.jpg");
+    textures[1] = load_jpg_texture("../assets/textures/ice.jpg");
+    textures[2] = load_jpg_texture("../assets/textures/ice_cheese.jpg");
+    textures[3] = load_jpg_texture("../assets/textures/container.jpg");
+    textures[4] = load_jpg_texture("../assets/textures/grass.jpg");
+    textures[5] = load_jpg_texture("../assets/textures/wood_frozen.jpg");
 
     struct Camera camera;
     init_camera(&camera);
@@ -63,11 +70,31 @@ int main()
     int c_key_is_blocked = 0;
 
     struct World world;
-    init_world(&world, 16);
+    init_world(&world, 4*4096 + N_TEXTURES);
 
-    for (float i = 0; i < 4; i++)
+    for (int z = 0; z < 64; z++)
     {
-        add_block(2*i, 0, 0, &world);
+        for (int y = 0; y < 3; y++)
+        {
+            for (int x = 0; x < 64; x++)
+            {
+                add_block(x, y, z, 0, &world);
+            } 
+        }
+
+    }
+
+    for (int z = 0; z < 64; z++)
+    {
+        for (int x = 0; x < 64; x++)
+        {
+            add_block(x, 3, z, 4, &world);
+        }
+    }
+
+    for (float i = 0; i < N_TEXTURES; i++)
+    {
+        add_block(i+8, 4, 0, (unsigned)i, &world);
     }
 
     struct CoordinateAxes coordinate_axes;
@@ -132,9 +159,12 @@ int main()
         glUniformMatrix4fv(world_view_location, 1, GL_FALSE, (float*)view);
         glUniformMatrix4fv(world_projection_location, 1, GL_FALSE, (float*)projection);
 
-        glBindTexture(GL_TEXTURE_2D, texture);
-        glBindVertexArray(world_VAO);
-        glDrawArrays(GL_TRIANGLES, 0, world.placed_blocks*BLOCK_N_VERTICES);
+        for (unsigned i = 0; i < world.placed_blocks; i++)
+        {
+            glBindTexture(GL_TEXTURE_2D, textures[world.blocks[i].texture_id]);
+            glBindVertexArray(world_VAO);
+            glDrawArrays(GL_TRIANGLES, i*BLOCK_N_VERTICES, BLOCK_N_VERTICES);
+        }
 
 
         if (show_coordinate_axes)
