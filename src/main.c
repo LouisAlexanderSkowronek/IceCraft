@@ -349,12 +349,12 @@ void processInput(GLFWwindow *window, struct Camera *camera, int *show_coordinat
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
     {
-        move_camera(camera, (vec3){ camera->front[0] * CAMERA_SPEED * delta, camera->front[1] * CAMERA_SPEED * delta, camera->front[2] * CAMERA_SPEED * delta });
+        move_camera(camera, (vec3){ camera->front[0] * CAMERA_SPEED * delta, 0.0f, camera->front[2] * CAMERA_SPEED * delta });
     }
 
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
     {
-        move_camera(camera, (vec3){ -camera->front[0] * CAMERA_SPEED * delta, -camera->front[1] * CAMERA_SPEED * delta, -camera->front[2] * CAMERA_SPEED * delta });
+        move_camera(camera, (vec3){ -camera->front[0] * CAMERA_SPEED * delta, 0.0f, -camera->front[2] * CAMERA_SPEED * delta });
     }
 
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
@@ -362,7 +362,7 @@ void processInput(GLFWwindow *window, struct Camera *camera, int *show_coordinat
         vec3 right;
         glm_cross(camera->front, camera->up, right);
         glm_normalize(right);
-        move_camera(camera, (vec3){ -right[0] * CAMERA_SPEED * delta, -right[1] * CAMERA_SPEED * delta, -right[2] * CAMERA_SPEED * delta });
+        move_camera(camera, (vec3){ -right[0] * CAMERA_SPEED * delta, 0.0f, -right[2] * CAMERA_SPEED * delta });
     }
 
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
@@ -370,7 +370,7 @@ void processInput(GLFWwindow *window, struct Camera *camera, int *show_coordinat
         vec3 right;
         glm_cross(camera->front, camera->up, right);
         glm_normalize(right);
-        move_camera(camera, (vec3){ right[0] * CAMERA_SPEED * delta, right[1] * CAMERA_SPEED * delta, right[2] * CAMERA_SPEED * delta });
+        move_camera(camera, (vec3){ right[0] * CAMERA_SPEED * delta, 0.0f, right[2] * CAMERA_SPEED * delta });
     }
 
     if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
