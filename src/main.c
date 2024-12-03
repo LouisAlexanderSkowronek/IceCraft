@@ -14,7 +14,7 @@
 #include "IceCraft/block_vertex.h"
 #include "IceCraft/block.h"
 #include "IceCraft/coordinate_axes.h"
-#include "IceCraft/world.h"
+#include "IceCraft/chunk.h"
 
 
 #define WINDOW_WIDTH 800
@@ -31,7 +31,7 @@ GLFWwindow* create_window(unsigned width, unsigned height, const char *title);
 
 unsigned load_jpg_texture(const char *filename);
 
-void generate_world_vao_and_vbo(unsigned *VAO_ptr, unsigned *VBO_ptr, struct World *world_ptr);
+void generate_world_vao_and_vbo(unsigned *VAO_ptr, unsigned *VBO_ptr, struct Chunk *world_ptr);
 
 void generate_coord_axes_vao_and_vbo(unsigned *VAO_ptr, unsigned *VBO_ptr, struct CoordinateAxes *coord_axes_ptr);
 
@@ -69,39 +69,39 @@ int main()
     int show_coordinate_axes = 0;
     int c_key_is_blocked = 0;
 
-    struct World world;
-    init_world(&world, 4*4096 + N_TEXTURES);
+    struct Chunk chunk;
+    init_chunk(&chunk);
 
-    for (int z = 0; z < 64; z++)
+    for (int z = 0; z < 16; z++)
     {
         for (int y = 0; y < 3; y++)
         {
-            for (int x = 0; x < 64; x++)
+            for (int x = 0; x < 16; x++)
             {
-                add_block(x, y, z, 0, &world);
+                add_block_to_chunk(x, y, -z, 0, &chunk);
             } 
         }
 
     }
 
-    for (int z = 0; z < 64; z++)
+    for (int z = 0; z < 16; z++)
     {
-        for (int x = 0; x < 64; x++)
+        for (int x = 0; x < 16; x++)
         {
-            add_block(x, 3, z, 4, &world);
+            add_block_to_chunk(x, 3, -z, 4, &chunk);
         }
     }
 
     for (float i = 0; i < N_TEXTURES; i++)
     {
-        add_block(i+8, 4, 0, (unsigned)i, &world);
+        add_block_to_chunk(i+8, 4, 0, (unsigned)i, &chunk);
     }
 
     struct CoordinateAxes coordinate_axes;
     generateCoordinateAxes(&coordinate_axes);
 
     GLuint world_VBO, world_VAO;
-    generate_world_vao_and_vbo(&world_VAO, &world_VBO, &world);
+    generate_world_vao_and_vbo(&world_VAO, &world_VBO, &chunk);
 
     GLuint coord_axes_VBO, coord_axes_VAO;
     generate_coord_axes_vao_and_vbo(&coord_axes_VAO, &coord_axes_VBO, &coordinate_axes);
@@ -159,9 +159,9 @@ int main()
         glUniformMatrix4fv(world_view_location, 1, GL_FALSE, (float*)view);
         glUniformMatrix4fv(world_projection_location, 1, GL_FALSE, (float*)projection);
 
-        for (unsigned i = 0; i < world.placed_blocks; i++)
+        for (unsigned i = 0; i < chunk.placed_blocks; i++)
         {
-            glBindTexture(GL_TEXTURE_2D, textures[world.blocks[i].texture_id]);
+            glBindTexture(GL_TEXTURE_2D, textures[chunk.blocks[i].texture_id]);
             glBindVertexArray(world_VAO);
             glDrawArrays(GL_TRIANGLES, i*BLOCK_N_VERTICES, BLOCK_N_VERTICES);
         }
@@ -194,7 +194,8 @@ int main()
     glDeleteProgram(world_shader_program);
     glDeleteProgram(coord_axes_shader_program);
 
-    free(world.vertices);
+    free(chunk.blocks);
+    free(chunk.vertices);
 
     glfwTerminate();
     return 0;
@@ -257,7 +258,7 @@ GLFWwindow* create_window(unsigned width, unsigned height, const char *title)
     glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-    glfwSwapInterval(0);
+    glfwSwapInterval(1);
 
     return window;
 }
@@ -282,7 +283,7 @@ unsigned load_jpg_texture(const char *filename)
 }
 
 
-void generate_world_vao_and_vbo(unsigned *VAO_ptr, unsigned *VBO_ptr, struct World *world_ptr)
+void generate_world_vao_and_vbo(unsigned *VAO_ptr, unsigned *VBO_ptr, struct Chunk *world_ptr)
 {
     // Generate and bind the VAO
     glGenVertexArrays(1, VAO_ptr);
