@@ -11,6 +11,11 @@ set(SRCS
     "${CMAKE_SOURCE_DIR}/src/main.c"
     "${CMAKE_SOURCE_DIR}/src/block.c"
     "${CMAKE_SOURCE_DIR}/src/camera.c"
+    "${CMAKE_SOURCE_DIR}/src/chunk.c"
+    "${CMAKE_SOURCE_DIR}/src/coordinate_axes.c"
+    "${CMAKE_SOURCE_DIR}/src/helper_funcs.c"
+    "${CMAKE_SOURCE_DIR}/src/input_handler.c"
+    "${CMAKE_SOURCE_DIR}/src/opengl_utils.c"
 )
 
 add_subdirectory( glfw glfw/src )

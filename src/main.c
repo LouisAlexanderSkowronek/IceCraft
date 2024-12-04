@@ -7,39 +7,20 @@
 
 #include "cglm/cglm.h"
 
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
-
 #include "IceCraft/camera.h"
 #include "IceCraft/block_vertex.h"
 #include "IceCraft/block.h"
 #include "IceCraft/coordinate_axes.h"
 #include "IceCraft/chunk.h"
+#include "IceCraft/helper_funcs.h"
+#include "IceCraft/opengl_utils.h"
+#include "IceCraft/input_handler.h"
 
 
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 800
 #define WINDOW_TITLE "IceCraft"
-#define N_TEXTURES 6
 
-
-void init_glfw();
-
-void init_glad();
-
-GLFWwindow* create_window(unsigned width, unsigned height, const char *title);
-
-unsigned load_jpg_texture(const char *filename);
-
-void generate_world_vao_and_vbo(unsigned *VAO_ptr, unsigned *VBO_ptr, struct Chunk *world_ptr);
-
-void generate_coord_axes_vao_and_vbo(unsigned *VAO_ptr, unsigned *VBO_ptr, struct CoordinateAxes *coord_axes_ptr);
-
-void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-
-unsigned build_shader_program(const char *vertex_shader_filepath, const char *fragment_shader_filepath);
-
-void processInput(GLFWwindow *window, struct Camera *camera, int *show_coordinate_axes, int *c_key_is_blocked, const float delta);
 
 int main()
 {
@@ -55,13 +36,8 @@ int main()
 
     unsigned coord_axes_shader_program = build_shader_program("../shaders/coord_axes_vertex_shader.glsl", "../shaders/coord_axes_fragment_shader.glsl");
 
-    unsigned textures[N_TEXTURES];
-    textures[0] = load_jpg_texture("../assets/textures/dirt.jpg");
-    textures[1] = load_jpg_texture("../assets/textures/ice.jpg");
-    textures[2] = load_jpg_texture("../assets/textures/ice_cheese.jpg");
-    textures[3] = load_jpg_texture("../assets/textures/container.jpg");
-    textures[4] = load_jpg_texture("../assets/textures/grass.jpg");
-    textures[5] = load_jpg_texture("../assets/textures/wood_frozen.jpg");
+    unsigned n_textures;
+    unsigned *textures = load_textures("../assets/textures/texture_list.txt", &n_textures);
 
     struct Camera camera;
     init_camera(&camera);
@@ -92,16 +68,20 @@ int main()
         }
     }
 
-    for (float i = 0; i < N_TEXTURES; i++)
+    for (unsigned i = 0; i < n_textures; i++)
     {
         add_block_to_chunk(i+8, 4, 0, (unsigned)i, &chunk);
     }
 
+    for (unsigned y = 4; y < 10; y++) {
+        add_block_to_chunk(13, y, -5, 5, &chunk);
+    }
+
     struct CoordinateAxes coordinate_axes;
-    generateCoordinateAxes(&coordinate_axes);
+    generate_coordinate_axes(&coordinate_axes);
 
     GLuint world_VBO, world_VAO;
-    generate_world_vao_and_vbo(&world_VAO, &world_VBO, &chunk);
+    generate_chunk_vao_and_vbo(&world_VAO, &world_VBO, &chunk);
 
     GLuint coord_axes_VBO, coord_axes_VAO;
     generate_coord_axes_vao_and_vbo(&coord_axes_VAO, &coord_axes_VBO, &coordinate_axes);
@@ -197,305 +177,8 @@ int main()
     free(chunk.blocks);
     free(chunk.vertices);
 
+    free(textures);
+
     glfwTerminate();
     return 0;
-}
-
-
-void init_glfw()
-{
-    if (!glfwInit())
-    {
-        const char *description;
-        int code = glfwGetError(&description);
-        if (description)
-        {
-            fprintf(stderr, "GLFW initialization failed with error code %d: %s\n", code, description);
-        } else
-        {
-            fprintf(stderr, "GLFW initialization failed with error code %d\n", code);
-        }
-
-        exit(1);
-    }
-
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-    #ifdef __APPLE__
-        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-    #endif
-}
-
-
-void init_glad()
-{
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-    {
-        fputs("Failed to initialize GLAD!", stderr);
-        exit(1);
-    }
-}
-
-
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-{
-    glViewport(0, 0, width, height);
-}
-
-
-GLFWwindow* create_window(unsigned width, unsigned height, const char *title)
-{
-    GLFWwindow* window = glfwCreateWindow(width, height, title, NULL, NULL);
-    if (!window)
-    {
-        fputs("Failed to create GLFW window\n", stderr);
-        glfwTerminate();
-        exit(1);
-    }
-
-    glfwMakeContextCurrent(window);
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-
-    glfwSwapInterval(1);
-
-    return window;
-}
-
-
-unsigned load_jpg_texture(const char *filename)
-{
-    int texture_width, texture_height, texture_n_channels;
-    stbi_set_flip_vertically_on_load(1);
-    unsigned char *texture_data = stbi_load(filename, &texture_width, &texture_height, &texture_n_channels, 0);
-    stbi_set_flip_vertically_on_load(0);
-
-    unsigned texture;
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texture_width, texture_height, 0, GL_RGB, GL_UNSIGNED_BYTE, texture_data);
-    glGenerateMipmap(GL_TEXTURE_2D);
-
-    stbi_image_free(texture_data);
-
-    return texture;
-}
-
-
-void generate_world_vao_and_vbo(unsigned *VAO_ptr, unsigned *VBO_ptr, struct Chunk *world_ptr)
-{
-    // Generate and bind the VAO
-    glGenVertexArrays(1, VAO_ptr);
-    glBindVertexArray(*VAO_ptr);
-
-    // Generate and bind VBO
-    glGenBuffers(1, VBO_ptr);
-    glBindBuffer(GL_ARRAY_BUFFER, *VBO_ptr);
-    glBufferData(GL_ARRAY_BUFFER, world_ptr->placed_blocks*BLOCK_VERTICES_SIZE, world_ptr->vertices, GL_STATIC_DRAW);
-
-    // Set vertex attribute pointers
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(struct BlockVertex), (GLvoid*)0);  // Position
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(struct BlockVertex), (GLvoid*)(3 * sizeof(GLfloat)));  // Texture coordinates
-    glEnableVertexAttribArray(1);
-
-    // Unbind VBO and VAO
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
-}
-
-
-void generate_coord_axes_vao_and_vbo(unsigned *VAO_ptr, unsigned *VBO_ptr, struct CoordinateAxes *coord_axes_ptr)
-{
-    // Generate and bind the VAO
-    glGenVertexArrays(1, VAO_ptr);
-    glBindVertexArray(*VAO_ptr);
-
-    // Generate and bind VBO
-    glGenBuffers(1, VBO_ptr);
-    glBindBuffer(GL_ARRAY_BUFFER, *VBO_ptr);
-    glBufferData(GL_ARRAY_BUFFER, COORDINATE_AXES_NVERTICES_SIZE, coord_axes_ptr->vertices, GL_STATIC_DRAW);
-
-    // Set vertex attribute pointers
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(struct LineVertex), (GLvoid*)0);  // Position
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(struct LineVertex), (GLvoid*)(3 * sizeof(GLfloat)));  // Color attributes
-    glEnableVertexAttribArray(1);
-
-    // Unbind VBO and VAO
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
-}
-
-
-void processInput(GLFWwindow *window, struct Camera *camera, int *show_coordinate_axes, int *c_key_is_blocked, const float delta)
-{
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-    {
-        glfwSetWindowShouldClose(window, GL_TRUE);
-    }
-
-    if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS && !(*c_key_is_blocked))
-    {
-        *show_coordinate_axes = !(*show_coordinate_axes);
-        *c_key_is_blocked = 1;
-    }
-
-    if (glfwGetKey(window, GLFW_KEY_C) == GLFW_RELEASE)
-    {
-        *c_key_is_blocked = 0;
-    }
-
-
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-    {
-        move_camera(camera, (vec3){ camera->front[0] * CAMERA_SPEED * delta, 0.0f, camera->front[2] * CAMERA_SPEED * delta });
-    }
-
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-    {
-        move_camera(camera, (vec3){ -camera->front[0] * CAMERA_SPEED * delta, 0.0f, -camera->front[2] * CAMERA_SPEED * delta });
-    }
-
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-    {
-        vec3 right;
-        glm_cross(camera->front, camera->up, right);
-        glm_normalize(right);
-        move_camera(camera, (vec3){ -right[0] * CAMERA_SPEED * delta, 0.0f, -right[2] * CAMERA_SPEED * delta });
-    }
-
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-    {
-        vec3 right;
-        glm_cross(camera->front, camera->up, right);
-        glm_normalize(right);
-        move_camera(camera, (vec3){ right[0] * CAMERA_SPEED * delta, 0.0f, right[2] * CAMERA_SPEED * delta });
-    }
-
-    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-    {
-        move_camera(camera, (vec3){ 0.0f, CAMERA_SPEED * delta, 0.0f });
-    }
-
-    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-    {
-        move_camera(camera, (vec3){ 0.0f, -CAMERA_SPEED * delta, 0.0f });
-    }
-
-
-    vec2 camera_rotation_offset = { 0.0f, 0.0f };
-
-    if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
-    {
-        camera_rotation_offset[0] += CAMERA_SENSITIVITY * CAMERA_SPEED * delta;
-    }
-
-    if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
-    {
-        camera_rotation_offset[0] -= CAMERA_SENSITIVITY * CAMERA_SPEED * delta;
-    }
-
-    if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
-    {
-        camera_rotation_offset[1] -= CAMERA_SENSITIVITY * CAMERA_SPEED * delta;
-    }
-
-    if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
-    {
-        camera_rotation_offset[1] += CAMERA_SENSITIVITY * CAMERA_SPEED * delta;
-    }
-
-    rotate_camera(camera, camera_rotation_offset);
-}
-
-
-unsigned build_shader_program(const char *vertex_shader_filepath, const char *fragment_shader_filepath)
-{
-    FILE *shader_file = fopen(vertex_shader_filepath, "r");
-    if (!shader_file)
-    {
-        fputs("Vertex shader not found!", stderr);
-        exit(1);
-    }
-
-    fseek(shader_file, 0L, SEEK_END);
-    unsigned file_size = ftell(shader_file);
-    rewind(shader_file);
-
-    char *vertex_shader_source = malloc((file_size+1) * sizeof(char));
-    if (!vertex_shader_source)
-    {
-        fprintf(stderr, "Couldn't allocate %u bytes for reading vertex shader!\n", file_size+1);
-        exit(1);
-    }
-
-    fread(vertex_shader_source, sizeof(char), file_size, shader_file);
-    vertex_shader_source[file_size] = '\0';
-    fclose(shader_file);
-
-    shader_file = fopen(fragment_shader_filepath, "r");
-    if (!shader_file)
-    {
-        fputs("Fragment shader not found!", stderr);
-        exit(1);
-    }
-
-    fseek(shader_file, 0L, SEEK_END);
-    file_size = ftell(shader_file);
-    rewind(shader_file);
-
-    char *fragment_shader_source = malloc((file_size+1) * sizeof(char));
-    if (!fragment_shader_source)
-    {
-        fprintf(stderr, "Couldn't allocate %u bytes for reading fragment shader!\n", file_size+1);
-        exit(1);
-    }
-
-    fread(fragment_shader_source, sizeof(char), file_size, shader_file);
-    fragment_shader_source[file_size] = '\0';
-    fclose(shader_file);
-
-    unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader, 1, (char const * const *)&vertex_shader_source, NULL);
-    glCompileShader(vertexShader);
-    // check for shader compile errors
-    int success;
-    char infoLog[512];
-    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-    if (!success)
-    {
-        glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-        fprintf(stderr, "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n%s\n", infoLog);
-    }
-    // fragment shader
-    unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, (char const * const *)&fragment_shader_source, NULL);
-    glCompileShader(fragmentShader);
-    // check for shader compile errors
-    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-    if (!success)
-    {
-        glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-        fprintf(stderr, "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n%s\n", infoLog);
-    }
-    // link shaders
-    unsigned int shaderProgram = glCreateProgram();
-    glAttachShader(shaderProgram, vertexShader);
-    glAttachShader(shaderProgram, fragmentShader);
-    glLinkProgram(shaderProgram);
-    // check for linking errors
-    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-    if (!success) {
-        glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-        fprintf(stderr, "ERROR::SHADER::PROGRAM::LINKING_FAILED\n%s\n", infoLog);
-    }
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
-
-    free(fragment_shader_source);
-    free(vertex_shader_source);
-
-    return shaderProgram;
 }

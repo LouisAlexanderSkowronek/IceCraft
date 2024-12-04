@@ -1,0 +1,6 @@
+../assets/textures/dirt.jpg
+../assets/textures/ice.jpg
+../assets/textures/ice_cheese.jpg
+../assets/textures/container.jpg
+../assets/textures/grass.jpg
+../assets/textures/wood_frozen.jpg

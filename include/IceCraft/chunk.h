@@ -14,15 +14,8 @@ struct Chunk
     struct BlockVertex *vertices;
 };
 
-void init_chunk(struct Chunk *chunk)
-{
-    chunk->placed_blocks = 0;
-    chunk->blocks = (struct Block*) malloc(sizeof(struct Block) * N_BLOCKS_PER_CHUNK);
-    chunk->vertices = (struct BlockVertex*) malloc(BLOCK_VERTICES_SIZE * N_BLOCKS_PER_CHUNK);
-}
+void init_chunk(struct Chunk *chunk);
 
-void add_block_to_chunk(float x, float y, float z, unsigned texture_id, struct Chunk *chunk)
-{
-    chunk->blocks[chunk->placed_blocks] = generate_block(x, y, z, texture_id, chunk->vertices + chunk->placed_blocks*BLOCK_N_VERTICES);
-    chunk->placed_blocks++;
-}
+void add_block_to_chunk(float x, float y, float z, unsigned texture_id, struct Chunk *chunk);
+
+void generate_chunk_vao_and_vbo(unsigned *VAO_ptr, unsigned *VBO_ptr, struct Chunk *chunk);
