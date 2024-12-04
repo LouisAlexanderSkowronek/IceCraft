@@ -9,12 +9,14 @@
 
 struct Chunk
 {
+    unsigned VBO, VAO;
     unsigned placed_blocks;
+    float x, z;
     struct Block *blocks;
     struct BlockVertex *vertices;
 };
 
-void init_chunk(struct Chunk *chunk);
+void init_chunk(float x, float z, struct Chunk *chunk);
 
 void add_block_to_chunk(float x, float y, float z, unsigned texture_id, struct Chunk *chunk);
 

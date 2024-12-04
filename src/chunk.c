@@ -3,16 +3,19 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-void init_chunk(struct Chunk *chunk)
+void init_chunk(float x, float z, struct Chunk *chunk)
 {
     chunk->placed_blocks = 0;
+    chunk->x = x;
+    chunk->z = z;
     chunk->blocks = (struct Block*) malloc(sizeof(struct Block) * N_BLOCKS_PER_CHUNK);
     chunk->vertices = (struct BlockVertex*) malloc(BLOCK_VERTICES_SIZE * N_BLOCKS_PER_CHUNK);
+    generate_chunk_vao_and_vbo(&chunk->VAO, &chunk->VBO, chunk);
 }
 
-void add_block_to_chunk(float x, float y, float z, unsigned texture_id, struct Chunk *chunk)
+void add_block_to_chunk(float global_x, float global_y, float global_z, unsigned texture_id, struct Chunk *chunk)
 {
-    chunk->blocks[chunk->placed_blocks] = generate_block(x, y, z, texture_id, chunk->vertices + chunk->placed_blocks*BLOCK_N_VERTICES);
+    chunk->blocks[chunk->placed_blocks] = generate_block(global_x, global_y, global_z, texture_id, chunk->vertices + chunk->placed_blocks*BLOCK_N_VERTICES);
     chunk->placed_blocks++;
 }
 

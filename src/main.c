@@ -15,6 +15,7 @@
 #include "IceCraft/helper_funcs.h"
 #include "IceCraft/opengl_utils.h"
 #include "IceCraft/input_handler.h"
+#include "IceCraft/world.h"
 
 
 #define WINDOW_WIDTH 800
@@ -45,43 +46,16 @@ int main()
     int show_coordinate_axes = 0;
     int c_key_is_blocked = 0;
 
-    struct Chunk chunk;
-    init_chunk(&chunk);
-
-    for (int z = 0; z < 16; z++)
-    {
-        for (int y = 0; y < 3; y++)
-        {
-            for (int x = 0; x < 16; x++)
-            {
-                add_block_to_chunk(x, y, -z, 0, &chunk);
-            } 
-        }
-
-    }
-
-    for (int z = 0; z < 16; z++)
-    {
-        for (int x = 0; x < 16; x++)
-        {
-            add_block_to_chunk(x, 3, -z, 4, &chunk);
-        }
-    }
-
-    for (unsigned i = 0; i < n_textures; i++)
-    {
-        add_block_to_chunk(i+8, 4, 0, (unsigned)i, &chunk);
-    }
-
-    for (unsigned y = 4; y < 10; y++) {
-        add_block_to_chunk(13, y, -5, 5, &chunk);
-    }
+    struct World world;
+    generate_flat_world(&world);
 
     struct CoordinateAxes coordinate_axes;
     generate_coordinate_axes(&coordinate_axes);
 
-    GLuint world_VBO, world_VAO;
-    generate_chunk_vao_and_vbo(&world_VAO, &world_VBO, &chunk);
+    for (unsigned i = 0; i < WORLD_N_CHUNKS; i++)
+    {
+        generate_chunk_vao_and_vbo(&world.chunk_ptrs[i]->VAO, &world.chunk_ptrs[i]->VBO, world.chunk_ptrs[i]);
+    }
 
     GLuint coord_axes_VBO, coord_axes_VAO;
     generate_coord_axes_vao_and_vbo(&coord_axes_VAO, &coord_axes_VBO, &coordinate_axes);
@@ -139,13 +113,15 @@ int main()
         glUniformMatrix4fv(world_view_location, 1, GL_FALSE, (float*)view);
         glUniformMatrix4fv(world_projection_location, 1, GL_FALSE, (float*)projection);
 
-        for (unsigned i = 0; i < chunk.placed_blocks; i++)
+        for (unsigned c = 0; c < WORLD_N_CHUNKS; c++)
         {
-            glBindTexture(GL_TEXTURE_2D, textures[chunk.blocks[i].texture_id]);
-            glBindVertexArray(world_VAO);
-            glDrawArrays(GL_TRIANGLES, i*BLOCK_N_VERTICES, BLOCK_N_VERTICES);
+            for (unsigned i = 0; i < world.chunk_ptrs[c]->placed_blocks; i++)
+            {
+                glBindTexture(GL_TEXTURE_2D, textures[world.chunk_ptrs[c]->blocks[i].texture_id]);
+                glBindVertexArray(world.chunk_ptrs[c]->VAO);
+                glDrawArrays(GL_TRIANGLES, i*BLOCK_N_VERTICES, BLOCK_N_VERTICES);
+            }
         }
-
 
         if (show_coordinate_axes)
         {
@@ -165,8 +141,11 @@ int main()
         frames_since_last_update++;
     }
 
-    glDeleteVertexArrays(1, &world_VAO);
-    glDeleteBuffers(1, &world_VBO);
+    for (unsigned i = 0; i < WORLD_N_CHUNKS; i++)
+    {
+        glDeleteVertexArrays(1, &world.chunk_ptrs[i]->VAO);
+        glDeleteBuffers(1, &world.chunk_ptrs[i]->VBO);
+    }
 
     glDeleteVertexArrays(1, &coord_axes_VAO);
     glDeleteBuffers(1, &coord_axes_VBO);
@@ -174,8 +153,7 @@ int main()
     glDeleteProgram(world_shader_program);
     glDeleteProgram(coord_axes_shader_program);
 
-    free(chunk.blocks);
-    free(chunk.vertices);
+    world_free_chunks(&world);
 
     free(textures);
 
