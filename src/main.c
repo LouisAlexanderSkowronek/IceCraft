@@ -6,6 +6,7 @@
 #include <math.h>
 
 #include "cglm/cglm.h"
+#include "textureatlas.h"
 
 #include "IceCraft/camera.h"
 #include "IceCraft/block_vertex.h"

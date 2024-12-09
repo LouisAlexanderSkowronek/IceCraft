@@ -22,9 +22,11 @@ add_subdirectory( glfw glfw/src )
 
 add_subdirectory( "${CMAKE_SOURCE_DIR}/lib/cglm" )
 
+add_subdirectory( "${CMAKE_SOURCE_DIR}/lib/textureatlas/libtextureatlas" )
+
 add_executable( IceCraft ${SRCS} )
 
-target_include_directories( IceCraft PUBLIC lib/glad/include lib/cglm/include lib/stb include/ )
+target_include_directories( IceCraft PUBLIC lib/glad/include lib/cglm/include lib/stb lib/textureatlas/libtextureatlas/include include/ )
 
 target_link_libraries( IceCraft glfw )
 

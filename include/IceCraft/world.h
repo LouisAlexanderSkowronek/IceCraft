@@ -7,7 +7,7 @@
 
 #include <stdio.h>
 
-#define WORLD_N_CHUNKS 5
+#define WORLD_N_CHUNKS 1
 
 struct World
 {
