@@ -9,3 +9,5 @@ void free_tokens(char **tokens, int count);
 unsigned load_jpg_texture(const char *filename);
 
 unsigned *load_textures(const char *filepath, unsigned *count);
+
+unsigned load_texture_atlas(const char *filepath);

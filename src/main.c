@@ -6,7 +6,6 @@
 #include <math.h>
 
 #include "cglm/cglm.h"
-#include "textureatlas.h"
 
 #include "IceCraft/camera.h"
 #include "IceCraft/block_vertex.h"
@@ -37,6 +36,8 @@ int main()
     unsigned world_shader_program = build_shader_program("../shaders/world_vertex_shader.glsl", "../shaders/world_fragment_shader.glsl");
 
     unsigned coord_axes_shader_program = build_shader_program("../shaders/coord_axes_vertex_shader.glsl", "../shaders/coord_axes_fragment_shader.glsl");
+
+    //unsigned textures = load_jpg_texture("../assets/textures/textures.jpg");
 
     unsigned n_textures;
     unsigned *textures = load_textures("../assets/textures/texture_list.txt", &n_textures);
