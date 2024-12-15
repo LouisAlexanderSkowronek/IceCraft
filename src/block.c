@@ -5,12 +5,54 @@
 #include "IceCraft/point.h"
 
 
-struct Block generate_block(float x, float y, float z, unsigned texture_id, struct BlockVertex *vertices)
+struct Block generate_block(float x, float y, float z, unsigned material_id, struct BlockVertex *vertices)
 {
     struct Block block;
-    block.texture_id = texture_id;
+    block.texture_id = material_id;
     block.vertices = vertices;
 
+    
+    float u_min, u_max, v_min, v_max;
+
+    switch (material_id)
+    {
+        case 0:
+            u_min = 1.0f / 3.0f;
+            u_max = 2.0f / 3.0f;
+            v_min = 0.0f;
+            v_max = 0.5f;
+            break;
+        case 1:
+            u_min = 0.0f;
+            u_max = 1.0f / 3.0f;
+            v_min = 0.5f;
+            v_max = 1.0f;
+            break;
+        case 2:
+            u_min = 1.0f / 3.0f;
+            u_max = 2.0f / 3.0f;
+            v_min = 0.5f;
+            v_max = 1.0f;
+            break;
+        case 3:
+            u_min = 0.0f;
+            u_max = 1.0f / 3.0f;
+            v_min = 0.0f;
+            v_max = 0.5f;
+            break;
+        case 4:
+            u_min = 2.0f / 3.0f;
+            u_max = 1.0f;
+            v_min = 0.0f;
+            v_max = 0.5f;
+            break;
+        case 5:
+            u_min = 2.0f / 3.0f;
+            u_max = 1.0f;
+            v_min = 0.5f;
+            v_max = 1.0f;
+            break;
+    }
 
     // Rückseite, unteres Dreieck
 
@@ -92,51 +134,6 @@ struct Block generate_block(float x, float y, float z, unsigned texture_id, stru
     vertices[10].v=1;
 
     vertices[11] = vertices[6];
-
-
-    // , unteres+ Dreieck
-
-    // A
-    vertices[12].x = -1;
-    vertices[12].y = -2;
-    vertices[12].z = 3;
-    vertices[12].u = 0.0f;
-    vertices[12].v = 1.0f;
-
-    // B
-    vertices[13].x = -1;
-    vertices[13].y = -4;
-    vertices[13].z = -1;
-    vertices[13].u = 0.0f;
-    vertices[13].v = 0.0f;
-
-    // Cr
-    vertices[14].x = 1;
-    vertices[14].y = -4;
-    vertices[14].z = -1;
-    vertices[14].u = 1.0f;
-    vertices[14].v = 0.0f;
-
-
-    // Vorderseite, oberes Dreieck
-
-    vertices[15].x=1;
-    vertices[15].y=-4;
-    vertices[15].z=-1;
-    vertices[15].u=1;
-    vertices[15].v=0;
-
-    vertices[16].x=1;
-    vertices[16].y=-2;
-    vertices[16].z=3;
-    vertices[16].u=1;
-    vertices[16].v=1;
-
-    vertices[17] = vertices[12];
-
-
-
-    /* **************** Quietschie-Bereich endet hier! **************** */
 
     // A, unteres Dreieck, unten
     vertices[12].x = -1;
@@ -299,6 +296,8 @@ struct Block generate_block(float x, float y, float z, unsigned texture_id, stru
         vertices[i].x = vertices[i].x/2.0f + x;
         vertices[i].y = vertices[i].y/2.0f + y;
         vertices[i].z = vertices[i].z/2.0f + z;
+        vertices[i].u = (vertices[i].u < 0.1f) ? u_min : u_max;
+        vertices[i].v = (vertices[i].v < 0.1f) ? v_min : v_max;
     }
 
     return block;

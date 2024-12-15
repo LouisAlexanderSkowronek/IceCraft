@@ -114,9 +114,7 @@ void free_tokens(char **tokens, int count)
 unsigned load_jpg_texture(const char *filename)
 {
     int texture_width, texture_height, texture_n_channels;
-    stbi_set_flip_vertically_on_load(1);
     unsigned char *texture_data = stbi_load(filename, &texture_width, &texture_height, &texture_n_channels, 0);
-    stbi_set_flip_vertically_on_load(0);
 
     unsigned texture;
     glGenTextures(1, &texture);
@@ -127,31 +125,4 @@ unsigned load_jpg_texture(const char *filename)
     stbi_image_free(texture_data);
 
     return texture;
-}
-
-
-unsigned *load_textures(const char *filepath, unsigned *count)
-{
-    char *texture_filepaths_string = read_file(filepath);
-    int n_textures;
-    char **texture_filepaths = split_string(texture_filepaths_string, '\n', &n_textures);
-    free(texture_filepaths_string);
-
-    unsigned *textures = (unsigned*) malloc(n_textures * sizeof(unsigned));
-    if (!textures)
-    {
-        fprintf(stderr, "Failed to malloc %lu bytes for loading textures!\n", n_textures * sizeof(unsigned));
-        exit(1);
-    }
-
-    for (int i = 0; i < n_textures; i++)
-    {
-        textures[i] = load_jpg_texture(texture_filepaths[i]);
-    }
-
-    *count = n_textures;
-
-    free_tokens(texture_filepaths, n_textures);
-
-    return textures;
 }

@@ -5,6 +5,7 @@
         "random": "c",
         "glfw3.h": "c",
         "camera.h": "c",
-        "block_vertex.h": "c"
+        "block_vertex.h": "c",
+        "limits": "c"
     }
 }

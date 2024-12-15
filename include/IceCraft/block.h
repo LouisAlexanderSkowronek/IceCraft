@@ -16,4 +16,4 @@ struct Block
 };
 
 
-struct Block generate_block(float x, float y, float z, unsigned texture_id, struct BlockVertex *vertices);
+struct Block generate_block(float x, float y, float z, unsigned material_id, struct BlockVertex *vertices);

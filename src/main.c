@@ -37,10 +37,7 @@ int main()
 
     unsigned coord_axes_shader_program = build_shader_program("../shaders/coord_axes_vertex_shader.glsl", "../shaders/coord_axes_fragment_shader.glsl");
 
-    //unsigned textures = load_jpg_texture("../assets/textures/textures.jpg");
-
-    unsigned n_textures;
-    unsigned *textures = load_textures("../assets/textures/texture_list.txt", &n_textures);
+    unsigned texture_atlas = load_jpg_texture("../assets/textures/textures.jpg");
 
     struct Camera camera;
     init_camera(&camera);
@@ -78,6 +75,8 @@ int main()
     double last_time = glfwGetTime();
     double time_of_last_update = last_time;
     const double update_timeout = 0.5;
+
+    glBindTexture(GL_TEXTURE_2D, texture_atlas);
 
     while (!glfwWindowShouldClose(window))
     {
@@ -117,12 +116,8 @@ int main()
 
         for (unsigned c = 0; c < WORLD_N_CHUNKS; c++)
         {
-            for (unsigned i = 0; i < world.chunk_ptrs[c]->placed_blocks; i++)
-            {
-                glBindTexture(GL_TEXTURE_2D, textures[world.chunk_ptrs[c]->blocks[i].texture_id]);
-                glBindVertexArray(world.chunk_ptrs[c]->VAO);
-                glDrawArrays(GL_TRIANGLES, i*BLOCK_N_VERTICES, BLOCK_N_VERTICES);
-            }
+            glBindVertexArray(world.chunk_ptrs[c]->VAO);
+            glDrawArrays(GL_TRIANGLES, 0, world.chunk_ptrs[c]->placed_blocks*BLOCK_N_VERTICES);
         }
 
         if (show_coordinate_axes)
@@ -156,8 +151,6 @@ int main()
     glDeleteProgram(coord_axes_shader_program);
 
     world_free_chunks(&world);
-
-    free(textures);
 
     glfwTerminate();
     return 0;

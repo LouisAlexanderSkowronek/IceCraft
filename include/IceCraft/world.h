@@ -50,6 +50,11 @@ void generate_flat_world(struct World *world)
                 add_block_to_chunk(x + xs[i], 3, -z - zs[i], 4, world->chunk_ptrs[i]);
             }
         }
+
+        add_block_to_chunk(5, 4, -5, 1, world->chunk_ptrs[i]);
+        add_block_to_chunk(6, 4, -5, 2, world->chunk_ptrs[i]);
+        add_block_to_chunk(7, 4, -5, 3, world->chunk_ptrs[i]);
+        add_block_to_chunk(8, 4, -5, 5, world->chunk_ptrs[i]);
     }
 }
 
