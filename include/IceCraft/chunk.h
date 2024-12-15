@@ -3,21 +3,25 @@
 #include "block.h"
 
 #define CHUNK_WIDTH 16
-#define CHUNK_HEIGHT 16
 #define CHUNK_DEPTH 16
-#define N_BLOCKS_PER_CHUNK (CHUNK_WIDTH * CHUNK_HEIGHT * CHUNK_DEPTH)
+#define CHUNK_BASE_AREA (CHUNK_WIDTH * CHUNK_DEPTH)
 
 struct Chunk
 {
     unsigned VBO, VAO;
     unsigned placed_blocks;
+    unsigned block_capacity;
     float x, z;
     struct Block *blocks;
     struct BlockVertex *vertices;
 };
 
-void init_chunk(float x, float z, struct Chunk *chunk);
+void init_chunk(float x, float z, struct Chunk *chunk, unsigned block_capacity);
 
 void add_block_to_chunk(float x, float y, float z, unsigned texture_id, struct Chunk *chunk);
+
+void remove_block_from_chunk(unsigned index, struct Chunk *chunk);
+
+int block_does_exist(float x, float y, float z, struct Chunk *chunk);
 
 void generate_chunk_vao_and_vbo(unsigned *VAO_ptr, unsigned *VBO_ptr, struct Chunk *chunk);

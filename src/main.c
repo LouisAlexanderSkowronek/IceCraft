@@ -97,7 +97,7 @@ int main()
             time_of_last_update = current_time;
         }
 
-        processInput(window, &camera, &show_coordinate_axes, &c_key_is_blocked, delta);
+        processInput(window, &camera, &world, &show_coordinate_axes, &c_key_is_blocked, delta);
 
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

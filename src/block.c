@@ -8,6 +8,9 @@
 struct Block generate_block(float x, float y, float z, unsigned material_id, struct BlockVertex *vertices)
 {
     struct Block block;
+    block.x = x;
+    block.y = y;
+    block.z = z;
     block.texture_id = material_id;
     block.vertices = vertices;
 
@@ -301,4 +304,51 @@ struct Block generate_block(float x, float y, float z, unsigned material_id, str
     }
 
     return block;
+}
+
+
+// Note: Block edge size is assumed to be 1.0f (0.5f in all directions from center).
+int point_is_in_block(float px, float py, float pz, struct Block *block)
+{
+    // Actually 1/2 a, but I'm too lazy to type a_half all the time.
+    const float a = 0.5f;
+    
+    const float left = block->x - a;
+    const float right = block->x + a;
+    const float bottom = block->y - a;
+    const float top = block->y + a;
+    const float front = block->z + a;
+    const float back = block->z - a;
+
+    return px >= left && px <= right && py >= bottom && py <= top && pz >= back && pz <= front;
+}
+
+int player_looks_at_block(vec3 player_pos, vec3 player_looking_direction, struct Block *block)
+{
+    const unsigned n_steps = 6;
+    const float step_size = 0.5f;
+
+    float px, py, pz;
+    px = player_pos[0];
+    py = player_pos[1];
+    pz = player_pos[2];
+
+    if (point_is_in_block(px, py, pz, block))
+    {
+        return 1;
+    }
+
+    for (unsigned i = 0; i < n_steps; i++)
+    {
+        px += player_looking_direction[0] * step_size;
+        py += player_looking_direction[1] * step_size;
+        pz += player_looking_direction[2] * step_size;
+
+        if (point_is_in_block(px, py, pz, block))
+        {
+            return 1;
+        }
+    }
+
+    return 0;
 }
