@@ -5,8 +5,14 @@
 
 #include "IceCraft/camera.h"
 
+static double remaining_time_block_placement_blocked = 0.0;
+static double remaining_time_block_breaking_blocked = 0.0;
+
 void processInput(GLFWwindow *window, struct Camera *camera, struct World *world, int *show_coordinate_axes, int *c_key_is_blocked, const float delta)
 {
+    remaining_time_block_breaking_blocked -= delta;
+    remaining_time_block_placement_blocked -= delta;
+
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
     {
         glfwSetWindowShouldClose(window, GL_TRUE);
@@ -25,18 +31,6 @@ void processInput(GLFWwindow *window, struct Camera *camera, struct World *world
 
     int should_place_block = 0;
     unsigned material_id;
-
-    if (should_place_block)
-    {
-        for (unsigned i = 0; i < world->chunk_ptrs[0]->placed_blocks; i++)
-        {
-            if (player_looks_at_block(camera->position, camera->front, world->chunk_ptrs[0]->blocks + i))
-            {
-                struct Block *tmp_block = world->chunk_ptrs[0]->blocks + i;
-                add_block_to_chunk(tmp_block->x, tmp_block->y + 1, tmp_block->z, material_id, world->chunk_ptrs[0]);
-            }
-        }
-    }
     
 
     if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
@@ -75,7 +69,7 @@ void processInput(GLFWwindow *window, struct Camera *camera, struct World *world
         material_id = 5;
     }
 
-    if (should_place_block)
+    if (should_place_block && remaining_time_block_placement_blocked <= 0.0)
     {
         for (unsigned i = 0; i < world->chunk_ptrs[0]->placed_blocks; i++)
         {
@@ -83,17 +77,21 @@ void processInput(GLFWwindow *window, struct Camera *camera, struct World *world
             {
                 struct Block *tmp_block = world->chunk_ptrs[0]->blocks + i;
                 add_block_to_chunk(tmp_block->x, tmp_block->y + 1, tmp_block->z, material_id, world->chunk_ptrs[0]);
+                remaining_time_block_placement_blocked = 0.5;
+                break;
             }
         }
     }
 
-    if (glfwGetKey(window, GLFW_KEY_Y) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_Y) == GLFW_PRESS && remaining_time_block_breaking_blocked <= 0.0)
     {
         for (unsigned i = 0; i < world->chunk_ptrs[0]->placed_blocks; i++)
         {
             if (player_looks_at_block(camera->position, camera->front, world->chunk_ptrs[0]->blocks + i))
             {
                 remove_block_from_chunk(i, world->chunk_ptrs[0]);
+                remaining_time_block_breaking_blocked = 0.5;
+                break;
             }
         }
     }
