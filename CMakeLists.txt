@@ -17,6 +17,7 @@ set(SRCS
     "${CMAKE_SOURCE_DIR}/src/input_handler.c"
     "${CMAKE_SOURCE_DIR}/src/opengl_utils.c"
     "${CMAKE_SOURCE_DIR}/src/world.c"
+    "${CMAKE_SOURCE_DIR}/src/hud.c"
 )
 
 add_subdirectory( glfw glfw/src )

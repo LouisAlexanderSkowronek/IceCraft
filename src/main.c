@@ -16,6 +16,7 @@
 #include "IceCraft/opengl_utils.h"
 #include "IceCraft/input_handler.h"
 #include "IceCraft/world.h"
+#include "IceCraft/hud.h"
 
 
 #define WINDOW_WIDTH 800
@@ -33,9 +34,11 @@ int main()
 
     glEnable(GL_DEPTH_TEST);
 
-    unsigned world_shader_program = build_shader_program("../shaders/world_vertex_shader.glsl", "../shaders/world_fragment_shader.glsl");
+    unsigned world_shader_program = build_shader_program("../shaders/world/vertex_shader.glsl", "../shaders/world/fragment_shader.glsl");
 
-    unsigned coord_axes_shader_program = build_shader_program("../shaders/coord_axes_vertex_shader.glsl", "../shaders/coord_axes_fragment_shader.glsl");
+    unsigned coord_axes_shader_program = build_shader_program("../shaders/coord_axes/vertex_shader.glsl", "../shaders/coord_axes/fragment_shader.glsl");
+
+    unsigned hud_shader_program = build_shader_program("../shaders/hud/vertex_shader.glsl", "../shaders/hud/fragment_shader.glsl");
 
     unsigned texture_atlas = load_jpg_texture("../assets/textures/textures.jpg");
 
@@ -50,6 +53,9 @@ int main()
 
     struct CoordinateAxes coordinate_axes;
     generate_coordinate_axes(&coordinate_axes);
+
+    struct HUD hud;
+    generate_hud(&hud);
 
     for (unsigned i = 0; i < WORLD_N_CHUNKS; i++)
     {
@@ -97,7 +103,7 @@ int main()
             time_of_last_update = current_time;
         }
 
-        processInput(window, &camera, &world, &show_coordinate_axes, &c_key_is_blocked, delta);
+        processInput(window, &hud, &camera, &world, &show_coordinate_axes, &c_key_is_blocked, delta);
 
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -131,6 +137,10 @@ int main()
             glBindVertexArray(coord_axes_VAO);
             glDrawArrays(GL_LINES, 0, COORDINATE_AXES_N_VERTICES);
         }
+
+        glUseProgram(hud_shader_program);
+        glBindVertexArray(hud.VAO);
+        glDrawArrays(GL_TRIANGLES, 0, HUD_N_VERTICES);
  
         glfwSwapBuffers(window);
         glfwPollEvents();

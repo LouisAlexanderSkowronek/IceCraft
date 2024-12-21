@@ -4,11 +4,12 @@
 #include <GLFW/glfw3.h>
 
 #include "IceCraft/camera.h"
+#include "IceCraft/hud.h"
 
 static double remaining_time_block_placement_blocked = 0.0;
 static double remaining_time_block_breaking_blocked = 0.0;
 
-void processInput(GLFWwindow *window, struct Camera *camera, struct World *world, int *show_coordinate_axes, int *c_key_is_blocked, const float delta)
+void processInput(GLFWwindow *window, struct HUD *hud, struct Camera *camera, struct World *world, int *show_coordinate_axes, int *c_key_is_blocked, const float delta)
 {
     remaining_time_block_breaking_blocked -= delta;
     remaining_time_block_placement_blocked -= delta;
@@ -31,46 +32,49 @@ void processInput(GLFWwindow *window, struct Camera *camera, struct World *world
 
     int should_place_block = 0;
     unsigned material_id;
-    
 
-    if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
     {
-        should_place_block = 1;
-        material_id = 0;
+        hud_select_item(0, hud);
     }
 
-    if (glfwGetKey(window, GLFW_KEY_U) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS)
     {
-        should_place_block = 1;
-        material_id = 1;
+        hud_select_item(1, hud);
     }
 
-        if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS)
     {
-        should_place_block = 1;
-        material_id = 2;
+        hud_select_item(2, hud);
     }
 
-    if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS)
     {
-        should_place_block = 1;
-        material_id = 3;
+        hud_select_item(3, hud);
     }
 
-        if (glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS)
     {
-        should_place_block = 1;
-        material_id = 4;
+        hud_select_item(4, hud);
     }
 
-        if (glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_6) == GLFW_PRESS)
     {
-        should_place_block = 1;
-        material_id = 5;
+        hud_select_item(5, hud);
     }
 
-    if (should_place_block && remaining_time_block_placement_blocked <= 0.0)
+    if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS && remaining_time_block_placement_blocked <= 0.0)
     {
+        switch (hud->selected_block_index)
+        {
+            case 0: material_id = 0; break;
+            case 1: material_id = 4; break;
+            case 2: material_id = 1; break;
+            case 3: material_id = 2; break;
+            case 4: material_id = 3; break;
+            case 5: material_id = 5; break;
+        }
+
         for (unsigned i = 0; i < world->chunk_ptrs[0]->placed_blocks; i++)
         {
             if (player_looks_at_block(camera->position, camera->front, world->chunk_ptrs[0]->blocks + i))
