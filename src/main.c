@@ -51,19 +51,16 @@ int main()
     struct World world;
     generate_flat_world(&world);
 
+    add_block_to_chunk(5, 4, -5, 1, world.chunk);
+    add_block_to_chunk(6, 4, -5, 2, world.chunk);
+    add_block_to_chunk(7, 4, -5, 3, world.chunk);
+    add_block_to_chunk(8, 4, -5, 5, world.chunk);
+
     struct CoordinateAxes coordinate_axes;
     generate_coordinate_axes(&coordinate_axes);
 
     struct HUD hud;
     generate_hud(&hud);
-
-    for (unsigned i = 0; i < WORLD_N_CHUNKS; i++)
-    {
-        generate_chunk_vao_and_vbo(&world.chunk_ptrs[i]->VAO, &world.chunk_ptrs[i]->VBO, world.chunk_ptrs[i]);
-    }
-
-    GLuint coord_axes_VBO, coord_axes_VAO;
-    generate_coord_axes_vao_and_vbo(&coord_axes_VAO, &coord_axes_VBO, &coordinate_axes);
 
     const GLuint world_model_location = glGetUniformLocation(world_shader_program, "model");
     const GLuint world_view_location  = glGetUniformLocation(world_shader_program, "view");
@@ -86,7 +83,7 @@ int main()
 
     while (!glfwWindowShouldClose(window))
     {
-        double current_time = glfwGetTime();
+        const double current_time = glfwGetTime();
         const double delta = current_time - last_time;
         last_time = current_time;
 
@@ -120,11 +117,8 @@ int main()
         glUniformMatrix4fv(world_view_location, 1, GL_FALSE, (float*)view);
         glUniformMatrix4fv(world_projection_location, 1, GL_FALSE, (float*)projection);
 
-        for (unsigned c = 0; c < WORLD_N_CHUNKS; c++)
-        {
-            glBindVertexArray(world.chunk_ptrs[c]->VAO);
-            glDrawArrays(GL_TRIANGLES, 0, world.chunk_ptrs[c]->placed_blocks*BLOCK_N_VERTICES);
-        }
+        glBindVertexArray(world.chunk->VAO);
+        glDrawArrays(GL_TRIANGLES, 0, world.chunk->placed_blocks*BLOCK_N_VERTICES);
 
         if (show_coordinate_axes)
         {
@@ -134,7 +128,7 @@ int main()
             glUniformMatrix4fv(coord_axes_view_location, 1, GL_FALSE, (float*)view);
             glUniformMatrix4fv(coord_axes_projection_location, 1, GL_FALSE, (float*)projection);
 
-            glBindVertexArray(coord_axes_VAO);
+            glBindVertexArray(coordinate_axes.VAO);
             glDrawArrays(GL_LINES, 0, COORDINATE_AXES_N_VERTICES);
         }
 
@@ -148,19 +142,16 @@ int main()
         frames_since_last_update++;
     }
 
-    for (unsigned i = 0; i < WORLD_N_CHUNKS; i++)
-    {
-        glDeleteVertexArrays(1, &world.chunk_ptrs[i]->VAO);
-        glDeleteBuffers(1, &world.chunk_ptrs[i]->VBO);
-    }
+    glDeleteVertexArrays(1, &world.chunk->VAO);
+    glDeleteBuffers(1, &world.chunk->VBO);
 
-    glDeleteVertexArrays(1, &coord_axes_VAO);
-    glDeleteBuffers(1, &coord_axes_VBO);
+    glDeleteVertexArrays(1, &coordinate_axes.VAO);
+    glDeleteBuffers(1, &coordinate_axes.VBO);
 
     glDeleteProgram(world_shader_program);
     glDeleteProgram(coord_axes_shader_program);
 
-    world_free_chunks(&world);
+    world_free_chunk(&world);
 
     glfwTerminate();
     return 0;

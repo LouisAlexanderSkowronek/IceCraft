@@ -22,18 +22,20 @@ void generate_coordinate_axes(struct CoordinateAxes *coord_axes)
         coord_axes->vertices[i].g = (i == 3) ? 1.0f : 0.0f;
         coord_axes->vertices[i].b = (i == 5) ? 1.0f : 0.0f;
     }
+
+    coord_axes_update_vao_and_vbo(coord_axes);
 }
 
 
-void generate_coord_axes_vao_and_vbo(unsigned *VAO_ptr, unsigned *VBO_ptr, struct CoordinateAxes *coord_axes)
+void coord_axes_update_vao_and_vbo(struct CoordinateAxes *coord_axes)
 {
     // Generate and bind the VAO
-    glGenVertexArrays(1, VAO_ptr);
-    glBindVertexArray(*VAO_ptr);
+    glGenVertexArrays(1, &coord_axes->VAO);
+    glBindVertexArray(coord_axes->VAO);
 
     // Generate and bind VBO
-    glGenBuffers(1, VBO_ptr);
-    glBindBuffer(GL_ARRAY_BUFFER, *VBO_ptr);
+    glGenBuffers(1, &coord_axes->VBO);
+    glBindBuffer(GL_ARRAY_BUFFER, coord_axes->VBO);
     glBufferData(GL_ARRAY_BUFFER, COORDINATE_AXES_NVERTICES_SIZE, coord_axes->vertices, GL_STATIC_DRAW);
 
     // Set vertex attribute pointers

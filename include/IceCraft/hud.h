@@ -18,6 +18,6 @@ struct HUD
 
 void generate_hud(struct HUD *hud);
 
-void generate_hud_vao_and_vbo(unsigned *VAO_ptr, unsigned *VBO_ptr, struct HUD *hud);
+void hud_update_vao_and_vbo(struct HUD *hud);
 
 void hud_select_item(unsigned index, struct HUD *hud);

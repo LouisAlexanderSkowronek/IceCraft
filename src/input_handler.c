@@ -30,41 +30,18 @@ void processInput(GLFWwindow *window, struct HUD *hud, struct Camera *camera, st
         *c_key_is_blocked = 0;
     }
 
-    int should_place_block = 0;
-    unsigned material_id;
-
-    if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
+    const unsigned n_items_in_hud = 6;
+    for (int i = 0; i < n_items_in_hud; i++)
     {
-        hud_select_item(0, hud);
-    }
-
-    if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS)
-    {
-        hud_select_item(1, hud);
-    }
-
-    if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS)
-    {
-        hud_select_item(2, hud);
-    }
-
-    if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS)
-    {
-        hud_select_item(3, hud);
-    }
-
-    if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS)
-    {
-        hud_select_item(4, hud);
-    }
-
-    if (glfwGetKey(window, GLFW_KEY_6) == GLFW_PRESS)
-    {
-        hud_select_item(5, hud);
+        if (glfwGetKey(window, GLFW_KEY_1 + i) == GLFW_PRESS)
+        {
+            hud_select_item(i, hud);
+        }
     }
 
     if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS && remaining_time_block_placement_blocked <= 0.0)
     {
+        unsigned material_id;
         switch (hud->selected_block_index)
         {
             case 0: material_id = 0; break;
@@ -75,29 +52,31 @@ void processInput(GLFWwindow *window, struct HUD *hud, struct Camera *camera, st
             case 5: material_id = 5; break;
         }
 
-        for (unsigned i = 0; i < world->chunk_ptrs[0]->placed_blocks; i++)
+        unsigned count;
+        unsigned *selected_blocks = blocks_player_looks_at(camera->position, camera->front, world->chunk, &count);
+
+        if (count)
         {
-            if (player_looks_at_block(camera->position, camera->front, world->chunk_ptrs[0]->blocks + i))
-            {
-                struct Block *tmp_block = world->chunk_ptrs[0]->blocks + i;
-                add_block_to_chunk(tmp_block->x, tmp_block->y + 1, tmp_block->z, material_id, world->chunk_ptrs[0]);
-                remaining_time_block_placement_blocked = 0.5;
-                break;
-            }
+            unsigned selected_block_idx = closest_block_to_player(selected_blocks, count, world->chunk, camera->position);
+            struct Block *selected_block = world->chunk->blocks + selected_block_idx;
+            add_block_to_chunk(selected_block->x, selected_block->y + 1, selected_block->z, material_id, world->chunk);
+            remaining_time_block_placement_blocked = 0.5;
         }
     }
 
     if (glfwGetKey(window, GLFW_KEY_Y) == GLFW_PRESS && remaining_time_block_breaking_blocked <= 0.0)
     {
-        for (unsigned i = 0; i < world->chunk_ptrs[0]->placed_blocks; i++)
+        unsigned count;
+        unsigned *selected_blocks = blocks_player_looks_at(camera->position, camera->front, world->chunk, &count);
+
+        if (count)
         {
-            if (player_looks_at_block(camera->position, camera->front, world->chunk_ptrs[0]->blocks + i))
-            {
-                remove_block_from_chunk(i, world->chunk_ptrs[0]);
-                remaining_time_block_breaking_blocked = 0.5;
-                break;
-            }
+            unsigned selected_block = closest_block_to_player(selected_blocks, count, world->chunk, camera->position);
+            remove_block_from_chunk(selected_block, world->chunk);
+            remaining_time_block_breaking_blocked = 0.5;
         }
+
+        free(selected_blocks);
     }
 
 
@@ -136,7 +115,6 @@ void processInput(GLFWwindow *window, struct HUD *hud, struct Camera *camera, st
     {
         move_camera(camera, (vec3){ 0.0f, -CAMERA_SPEED * delta, 0.0f });
     }
-
 
     vec2 camera_rotation_offset = { 0.0f, 0.0f };
 

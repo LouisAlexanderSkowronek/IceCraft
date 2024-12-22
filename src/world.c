@@ -10,76 +10,38 @@
 
 void generate_flat_world(struct World *world)
 {
-    for (unsigned i = 0; i < WORLD_N_CHUNKS; i++)
+    world->chunk = (struct Chunk*) malloc(sizeof(struct Chunk));
+    if (!world->chunk)
     {
-        world->chunk_ptrs[i] = (struct Chunk*) malloc(sizeof(struct Chunk));
-        if (!world->chunk_ptrs[i])
-        {
-            fprintf(stderr, "Failed to allocate %lu bytes for a chunk at index %d!\n", sizeof(struct Chunk), i);
-            exit(1);
-        }
+        fprintf(stderr, "Failed to allocate %lu bytes for the only chunk!\n", sizeof(struct Chunk));
+        exit(1);
     }
 
-    float xs[5] = { 0.0f, 0.0f, 16.0f, 0.0f, -16.0f };
-    float zs[5] = { 0.0f, -16.0f, 0.0f, 16.0f, 0.0f };
+    init_chunk(0.0f, 0.0f, world->chunk, CHUNK_BASE_AREA * 5);
 
-    for (unsigned i = 0; i < WORLD_N_CHUNKS; i++) {
-        init_chunk(xs[i], zs[i], world->chunk_ptrs[i], CHUNK_BASE_AREA * 5);
-
-        for (int z = 0; z < 16; z++)
-        {
-            for (int y = 0; y < 3; y++)
-            {
-                for (int x = 0; x < 16; x++)
-                {
-                    add_block_to_chunk(x + xs[i], y, -z - zs[i], 0, world->chunk_ptrs[i]);
-                } 
-            }
-        }
-
-        for (int z = 0; z < 16; z++)
+    for (int z = 0; z < 16; z++)
+    {
+        for (int y = 0; y < 3; y++)
         {
             for (int x = 0; x < 16; x++)
             {
-                add_block_to_chunk(x + xs[i], 3, -z - zs[i], 4, world->chunk_ptrs[i]);
+                add_block_to_chunk(x, y, -z, 0, world->chunk);
             }
         }
-
-        add_block_to_chunk(5, 4, -5, 1, world->chunk_ptrs[i]);
-        add_block_to_chunk(6, 4, -5, 2, world->chunk_ptrs[i]);
-        add_block_to_chunk(7, 4, -5, 3, world->chunk_ptrs[i]);
-        add_block_to_chunk(8, 4, -5, 5, world->chunk_ptrs[i]);
     }
-}
 
-
-void update_loaded_chunks(float player_x, float player_z, struct World *world)
-{
-    for (unsigned i = 0; i < WORLD_N_CHUNKS; i++)
+    for (int z = 0; z < 16; z++)
     {
-        const float dx = abs(world->chunk_ptrs[i]->x - player_x);
-        const float dz = abs(world->chunk_ptrs[i]->z - player_z);
-
-        if (dx > 16 || dz > 16)
+        for (int x = 0; x < 16; x++)
         {
-            free(world->chunk_ptrs[i]->blocks);
-            free(world->chunk_ptrs[i]->vertices);
-
-            glDeleteVertexArrays(1, &world->chunk_ptrs[i]->VAO);
-            glDeleteBuffers(1, &world->chunk_ptrs[i]->VBO);
-            
-            free(world->chunk_ptrs[i]);
-            world->chunk_ptrs[i] = NULL;
+            add_block_to_chunk(x, 3, -z, 4, world->chunk);
         }
     }
 }
 
-void world_free_chunks(struct World *world)
+void world_free_chunk(struct World *world)
 {
-    for (unsigned i = 0; i < WORLD_N_CHUNKS; i++)
-    {
-        free(world->chunk_ptrs[i]->blocks);
-        free(world->chunk_ptrs[i]->vertices);
-        free(world->chunk_ptrs[i]);
-    }
+    free(world->chunk->blocks);
+    free(world->chunk->vertices);
+    free(world->chunk);
 }

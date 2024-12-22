@@ -57,19 +57,19 @@ void generate_hud(struct HUD *hud)
 
     hud_select_item(0, hud);
 
-    generate_hud_vao_and_vbo(&hud->VAO, &hud->VBO, hud);
+    hud_update_vao_and_vbo(hud);
 
 }
 
-void generate_hud_vao_and_vbo(unsigned *VAO_ptr, unsigned *VBO_ptr, struct HUD *hud)
+void hud_update_vao_and_vbo(struct HUD *hud)
 {
     // Generate and bind the VAO
-    glGenVertexArrays(1, VAO_ptr);
-    glBindVertexArray(*VAO_ptr);
+    glGenVertexArrays(1, &hud->VAO);
+    glBindVertexArray(hud->VAO);
 
     // Generate and bind VBO
-    glGenBuffers(1, VBO_ptr);
-    glBindBuffer(GL_ARRAY_BUFFER, *VBO_ptr);
+    glGenBuffers(1, &hud->VBO);
+    glBindBuffer(GL_ARRAY_BUFFER, hud->VBO);
     glBufferData(GL_ARRAY_BUFFER, HUD_VERTICES_SIZE, hud->vertices, GL_STATIC_DRAW);
 
     // Set vertex attribute pointers
@@ -120,5 +120,5 @@ void hud_select_item(unsigned index, struct HUD *hud)
     hud->vertices[HUD_N_VERTICES-1].g = 0.0f;
     hud->vertices[HUD_N_VERTICES-1].b = 0.0f;
 
-    generate_hud_vao_and_vbo(&hud->VAO, &hud->VBO, hud);
+    hud_update_vao_and_vbo(hud);
 }

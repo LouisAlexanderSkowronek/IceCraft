@@ -8,8 +8,9 @@
 struct CoordinateAxes
 {
     struct LineVertex vertices[COORDINATE_AXES_N_VERTICES];
+    unsigned VAO, VBO;
 };
 
 void generate_coordinate_axes(struct CoordinateAxes *coord_axes);
 
-void generate_coord_axes_vao_and_vbo(unsigned *VAO_ptr, unsigned *VBO_ptr, struct CoordinateAxes *coord_axes);
+void coord_axes_update_vao_and_vbo(struct CoordinateAxes *coord_axes);
