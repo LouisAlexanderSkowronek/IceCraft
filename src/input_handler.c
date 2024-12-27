@@ -4,12 +4,12 @@
 #include <GLFW/glfw3.h>
 
 #include "IceCraft/camera.h"
-#include "IceCraft/hud.h"
+#include "IceCraft/gui_block_selector.h"
 
 static double remaining_time_block_placement_blocked = 0.0;
 static double remaining_time_block_breaking_blocked = 0.0;
 
-void processInput(GLFWwindow *window, struct HUD *hud, struct Camera *camera, struct World *world, int *show_coordinate_axes, int *c_key_is_blocked, const float delta)
+void processInput(GLFWwindow *window, struct GUIBlockSelector *hud, struct Camera *camera, struct World *world, int *show_coordinate_axes, int *c_key_is_blocked, const float delta)
 {
     remaining_time_block_breaking_blocked -= delta;
     remaining_time_block_placement_blocked -= delta;

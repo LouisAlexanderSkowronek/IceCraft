@@ -16,7 +16,8 @@
 #include "IceCraft/opengl_utils.h"
 #include "IceCraft/input_handler.h"
 #include "IceCraft/world.h"
-#include "IceCraft/hud.h"
+#include "IceCraft/gui_block_selector.h"
+#include "IceCraft/gui_crossbar.h"
 
 
 #define WINDOW_WIDTH 800
@@ -59,8 +60,11 @@ int main()
     struct CoordinateAxes coordinate_axes;
     generate_coordinate_axes(&coordinate_axes);
 
-    struct HUD hud;
-    generate_hud(&hud);
+    struct GUIBlockSelector block_selector;
+    generate_hud(&block_selector);
+
+    struct GUICrossbar crossbar;
+    generate_crossbar(&crossbar);
 
     const GLuint world_model_location = glGetUniformLocation(world_shader_program, "model");
     const GLuint world_view_location  = glGetUniformLocation(world_shader_program, "view");
@@ -100,7 +104,7 @@ int main()
             time_of_last_update = current_time;
         }
 
-        processInput(window, &hud, &camera, &world, &show_coordinate_axes, &c_key_is_blocked, delta);
+        processInput(window, &block_selector, &camera, &world, &show_coordinate_axes, &c_key_is_blocked, delta);
 
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -133,8 +137,10 @@ int main()
         }
 
         glUseProgram(hud_shader_program);
-        glBindVertexArray(hud.VAO);
+        glBindVertexArray(block_selector.VAO);
         glDrawArrays(GL_TRIANGLES, 0, HUD_N_VERTICES);
+        glBindVertexArray(crossbar.VAO);
+        glDrawArrays(GL_TRIANGLES, 0, GUI_CROSSBAR_N_VERTICES);
  
         glfwSwapBuffers(window);
         glfwPollEvents();

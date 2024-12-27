@@ -1,6 +1,6 @@
 #pragma once
 
-struct HUDVertex
+struct GUIBlockSelectorVertex
 {
     float x, y, r, g, b;
 };

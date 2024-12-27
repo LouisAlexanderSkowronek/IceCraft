@@ -1,6 +1,6 @@
-#include "IceCraft/hud.h"
+#include "IceCraft/gui_block_selector.h"
 
-static void draw_rect(float x, float y, float r, float g, float b, struct HUDVertex *vertices)
+static void draw_rect(float x, float y, float r, float g, float b, struct GUIBlockSelectorVertex *vertices)
 {
     const float half_edge_size = 0.1f;
     vertices[0].x = x - half_edge_size;
@@ -40,7 +40,7 @@ static void draw_rect(float x, float y, float r, float g, float b, struct HUDVer
     vertices[5].b = b;
 }
 
-void generate_hud(struct HUD *hud)
+void generate_hud(struct GUIBlockSelector *hud)
 {
     const float dirt_r = 0.5882352941176471f;
     const float dirt_g = 0.29411764;
@@ -61,7 +61,7 @@ void generate_hud(struct HUD *hud)
 
 }
 
-void hud_update_vao_and_vbo(struct HUD *hud)
+void hud_update_vao_and_vbo(struct GUIBlockSelector *hud)
 {
     // Generate and bind the VAO
     glGenVertexArrays(1, &hud->VAO);
@@ -73,9 +73,9 @@ void hud_update_vao_and_vbo(struct HUD *hud)
     glBufferData(GL_ARRAY_BUFFER, HUD_VERTICES_SIZE, hud->vertices, GL_STATIC_DRAW);
 
     // Set vertex attribute pointers
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(struct HUDVertex), (GLvoid*)0);  // Position
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(struct GUIBlockSelectorVertex), (GLvoid*)0);  // Position
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(struct HUDVertex), (GLvoid*)(2 * sizeof(GLfloat)));  // Color attributes
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(struct GUIBlockSelectorVertex), (GLvoid*)(2 * sizeof(GLfloat)));  // Color attributes
     glEnableVertexAttribArray(1);
 
     // Unbind VBO and VAO
@@ -84,7 +84,7 @@ void hud_update_vao_and_vbo(struct HUD *hud)
 }
 
 
-void hud_select_item(unsigned index, struct HUD *hud)
+void hud_select_item(unsigned index, struct GUIBlockSelector *hud)
 {
     const unsigned max_index = 5;
 

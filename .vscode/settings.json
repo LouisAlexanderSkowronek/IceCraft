@@ -6,6 +6,9 @@
         "glfw3.h": "c",
         "camera.h": "c",
         "block_vertex.h": "c",
-        "limits": "c"
+        "limits": "c",
+        "coordinate_axes.h": "c",
+        "input_handler.h": "c",
+        "gui_block_selector.h": "c"
     }
 }
