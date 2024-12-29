@@ -19,6 +19,7 @@ set(SRCS
     "${CMAKE_SOURCE_DIR}/src/world.c"
     "${CMAKE_SOURCE_DIR}/src/gui_block_selector.c"
     "${CMAKE_SOURCE_DIR}/src/gui_crossbar.c"
+    "${CMAKE_SOURCE_DIR}/src/player.c"
 )
 
 add_subdirectory( glfw glfw/src )

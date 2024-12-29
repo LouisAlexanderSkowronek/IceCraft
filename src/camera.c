@@ -7,7 +7,7 @@ void init_camera(struct Camera *camera)
     camera->yaw = -90.0f;
 
     camera->position[0] = 0.0f;
-    camera->position[1] = 5.0f;
+    camera->position[1] = 4.8f;
     camera->position[2] = 0.0f;
 
     camera->front[0] = camera->front[1] = 0.0f;

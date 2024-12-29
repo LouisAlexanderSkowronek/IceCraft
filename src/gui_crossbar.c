@@ -38,8 +38,6 @@ void generate_crossbar(struct GUICrossbar *crossbar)
     crossbar->vertices[5].g = 1.0f;
     crossbar->vertices[5].b = 1.0f;
 
-    //
-
     crossbar->vertices[6].x = -0.05f;
     crossbar->vertices[6].y = +0.01f;
     crossbar->vertices[6].r = 1.0f;

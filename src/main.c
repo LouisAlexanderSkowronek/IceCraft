@@ -18,6 +18,7 @@
 #include "IceCraft/world.h"
 #include "IceCraft/gui_block_selector.h"
 #include "IceCraft/gui_crossbar.h"
+#include "IceCraft/player.h"
 
 
 #define WINDOW_WIDTH 800
@@ -43,8 +44,9 @@ int main()
 
     unsigned texture_atlas = load_jpg_texture("../assets/textures/textures.jpg");
 
-    struct Camera camera;
-    init_camera(&camera);
+    struct Player louis;
+    init_player(&louis);
+    int space_key_is_blocked = 0;
 
     int show_coordinate_axes = 0;
     int c_key_is_blocked = 0;
@@ -104,7 +106,9 @@ int main()
             time_of_last_update = current_time;
         }
 
-        processInput(window, &block_selector, &camera, &world, &show_coordinate_axes, &c_key_is_blocked, delta);
+        update_player(&louis, world.chunk, delta);
+
+        processInput(window, &block_selector, &louis, &world, &show_coordinate_axes, &c_key_is_blocked, &space_key_is_blocked, delta);
 
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -112,8 +116,8 @@ int main()
         glUseProgram(world_shader_program);
 
         vec3 camera_target;
-        glm_vec3_add(camera.position, camera.front, camera_target);
-        glm_lookat(camera.position, camera_target, camera.up, view);
+        glm_vec3_add(louis.camera.position, louis.camera.front, camera_target);
+        glm_lookat(louis.camera.position, camera_target, louis.camera.up, view);
 
         mat4 model = GLM_MAT4_IDENTITY_INIT;
 
