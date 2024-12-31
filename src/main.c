@@ -25,6 +25,8 @@
 #define WINDOW_HEIGHT 800
 #define WINDOW_TITLE "IceCraft"
 
+int gravity_enabled = 1;
+
 
 int main()
 {
@@ -58,6 +60,7 @@ int main()
     add_block_to_chunk(6, 4, -5, 2, world.chunk);
     add_block_to_chunk(7, 4, -5, 3, world.chunk);
     add_block_to_chunk(8, 4, -5, 5, world.chunk);
+    add_block_to_chunk(6, 10, -5, 0, world.chunk);
 
     struct CoordinateAxes coordinate_axes;
     generate_coordinate_axes(&coordinate_axes);
@@ -87,11 +90,14 @@ int main()
 
     glBindTexture(GL_TEXTURE_2D, texture_atlas);
 
+    double remaining_time_next_print = 0.0;
+
     while (!glfwWindowShouldClose(window))
     {
         const double current_time = glfwGetTime();
         const double delta = current_time - last_time;
         last_time = current_time;
+        remaining_time_next_print -= delta;
 
         if (current_time >= time_of_last_update + update_timeout)
         {

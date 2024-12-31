@@ -4,6 +4,7 @@
 
 #include "IceCraft/point.h"
 #include "IceCraft/chunk.h"
+#include "IceCraft/player.h"
 
 inline static void assign_point_to_vertex(const struct Point *p, struct BlockVertex *v)
 {
@@ -389,4 +390,271 @@ unsigned closest_block_to_player(unsigned *selected_blocks, unsigned n_selected_
     free(distances);
 
     return idx_min_distance;
+}
+
+
+enum BlockFace player_looks_at_face(struct Player *player, struct Block *block)
+{
+    const float ELx = block->x - 0.5f;
+    const float ELy_min = block->y - 0.5f;
+    const float ELy_max = block->y + 0.5f;
+    const float ELz_min = block->z - 0.5f;
+    const float ELz_max = block->z + 0.5f;
+
+    const float ERx = block->x + 0.5f;
+    const float ERy_min = block->y - 0.5f;
+    const float ERy_max = block->y + 0.5f;
+    const float ERz_min = block->z - 0.5f;
+    const float ERz_max = block->z + 0.5f;
+
+    const float ETx_min = block->x - 0.5f;
+    const float ETx_max = block->x + 0.5f;
+    const float ETy = block->y + 0.5f;
+    const float ETz_min = block->z - 0.5f;
+    const float ETz_max = block->z + 0.5f;
+
+    const float EBx_min = block->x - 0.5f;
+    const float EBx_max = block->x + 0.5f;
+    const float EBy = block->y - 0.5f;
+    const float EBz_min = block->z - 0.5f;
+    const float EBz_max = block->z + 0.5f;
+
+    const float EFx_min = block->x - 0.5f;
+    const float EFx_max = block->x + 0.5f;
+    const float EFy_min = block->y - 0.5f;
+    const float EFy_max = block->y + 0.5f;
+    const float EFz = block->z + 0.5f;
+
+    const float EBCKx_min = block->x - 0.5f;
+    const float EBCKx_max = block->x + 0.5f;
+    const float EBCKy_min = block->y - 0.5f;
+    const float EBCKy_max = block->y + 0.5f;
+    const float EBCKz = block->z - 0.5f;
+
+    float ts[6];  // Left, Right, Top, Bottom, Front, Back
+    ts[0] = (ELx - player->camera.position[0]) / player->camera.front[0];
+    ts[1] = (ERx - player->camera.position[0]) / player->camera.front[0];
+    ts[2] = (ETy - player->camera.position[1]) / player->camera.front[1];
+    ts[3] = (EBy - player->camera.position[1]) / player->camera.front[1];
+    ts[4] = (EFz - player->camera.position[2]) / player->camera.front[2];
+    ts[5] = (EBCKz - player->camera.position[2]) / player->camera.front[2];
+
+    const float potential_hit_Lx = player->camera.position[0] + ts[0] * player->camera.front[0];
+    const float potential_hit_Ly = player->camera.position[1] + ts[0] * player->camera.front[1];
+    const float potential_hit_Lz = player->camera.position[2] + ts[0] * player->camera.front[2];
+
+    const float potential_hit_Rx = player->camera.position[0] + ts[1] * player->camera.front[0];
+    const float potential_hit_Ry = player->camera.position[1] + ts[1] * player->camera.front[1];
+    const float potential_hit_Rz = player->camera.position[2] + ts[1] * player->camera.front[2];
+
+    const float potential_hit_Tx = player->camera.position[0] + ts[2] * player->camera.front[0];
+    const float potential_hit_Ty = player->camera.position[1] + ts[2] * player->camera.front[1];
+    const float potential_hit_Tz = player->camera.position[2] + ts[2] * player->camera.front[2];
+
+    const float potential_hit_Bx = player->camera.position[0] + ts[3] * player->camera.front[0];
+    const float potential_hit_By = player->camera.position[1] + ts[3] * player->camera.front[1];
+    const float potential_hit_Bz = player->camera.position[2] + ts[3] * player->camera.front[2];
+
+    const float potential_hit_Fx = player->camera.position[0] + ts[4] * player->camera.front[0];
+    const float potential_hit_Fy = player->camera.position[1] + ts[4] * player->camera.front[1];
+    const float potential_hit_Fz = player->camera.position[2] + ts[4] * player->camera.front[2];
+
+    const float potential_hit_BCKx = player->camera.position[0] + ts[5] * player->camera.front[0];
+    const float potential_hit_BCKy = player->camera.position[1] + ts[5] * player->camera.front[1];
+    const float potential_hit_BCKz = player->camera.position[2] + ts[5] * player->camera.front[2];
+
+    const int bl = potential_hit_Ly >= ELy_min && potential_hit_Ly <= ELy_max
+        && potential_hit_Lz >= ELz_min && potential_hit_Lz <= ELz_max;
+    
+    const int br = potential_hit_Ry >= ERy_min && potential_hit_Ry <= ERy_max
+        && potential_hit_Rz >= ERz_min && potential_hit_Rz <= ERz_max;
+
+    const int bt = potential_hit_Tx >= ETx_min && potential_hit_Tx <= ETx_max
+        && potential_hit_Tz >= ETz_min && potential_hit_Tz <= ETz_max;
+    
+    const int bb = potential_hit_Bx >= EBx_min && potential_hit_Bx <= EBx_max
+        && potential_hit_Bz >= EBz_min && potential_hit_Bz <= EBz_max;
+
+    const int bf = potential_hit_Fx >= EFx_min && potential_hit_Fx <= EFx_max
+        && potential_hit_Fy >= EFy_min && potential_hit_Fy <= EFy_max;
+
+    const int bbck = potential_hit_BCKx >= EBCKx_min && potential_hit_BCKx <= EBCKx_max
+        && potential_hit_BCKy >= EBCKy_min && potential_hit_BCKy <= EBCKy_max;
+
+
+    unsigned n_faces_at_once = 0;
+    if (bl) { n_faces_at_once++; }
+    if (br) { n_faces_at_once++; }
+    if (bt) { n_faces_at_once++; }
+    if (bb) { n_faces_at_once++; }
+    if (bf) { n_faces_at_once++; }
+    if (bbck) { n_faces_at_once++; }
+
+    if (n_faces_at_once > 2)
+    {
+        fprintf(stderr, "%u faces at once!\n", n_faces_at_once);
+        exit(1);
+    }
+
+    if (bl && br)
+    {
+        if (ts[0] < ts[1])
+        {
+            return LEFT;
+        }
+
+        return RIGHT;
+    }
+
+    if (bl && bt)
+    {
+        if (ts[0] < ts[2])
+        {
+            return LEFT;
+        }
+
+        return TOP;
+    }
+
+    if (bl && bb)
+    {
+        if (ts[0] < ts[3])
+        {
+            return LEFT;
+        }
+
+        return BOTTOM;
+    }
+
+    if (bl && bf)
+    {
+        if (ts[0] < ts[4])
+        {
+            return LEFT;
+        }
+
+        return FRONT;
+    }
+
+    if (bl && bbck)
+    {
+        if (ts[0] < ts[5])
+        {
+            return LEFT;
+        }
+
+        return BACK;
+    }
+
+    if (br && bt)
+    {
+        if (ts[1] < ts[2])
+        {
+            return RIGHT;
+        }
+
+        return TOP;
+    }
+
+    if (br && bb)
+    {
+        if (ts[1] < ts[3])
+        {
+            return RIGHT;
+        }
+
+        return BOTTOM;
+    }
+
+    if (br && bf)
+    {
+        if (ts[1] < ts[4])
+        {
+            return RIGHT;
+        }
+
+        return FRONT;
+    }
+
+    if (br && bbck)
+    {
+        if (ts[1] < ts[5])
+        {
+            return RIGHT;
+        }
+
+        return BACK;
+    }
+
+    if (bt && bb)
+    {
+        if (ts[2] < ts[3])
+        {
+            return TOP;
+        }
+
+        return BOTTOM;
+    }
+
+    if (bt && bf)
+    {
+        if (ts[2] < ts[4])
+        {
+            return TOP;
+        }
+
+        return FRONT;
+    }
+
+    if (bt && bbck)
+    {
+        if (ts[2] < ts[5])
+        {
+            return TOP;
+        }
+
+        return BACK;
+    }
+
+    if (bf && bbck)
+    {
+        if (ts[4] < ts[5])
+        {
+            return FRONT;
+        }
+
+        return BACK;
+    }
+
+    if (bt)
+    {
+        return TOP;
+    }
+
+    if (bl)
+    {
+        return LEFT;
+    }
+
+    if (br)
+    {
+        return RIGHT;
+    }
+
+    if (bb)
+    {
+        return BOTTOM;
+    }
+
+    if (bf)
+    {
+        return FRONT;
+    }
+
+    if (bbck)
+    {
+        return BACK;
+    }
+    
+    return OTHER_OR_NONE;
 }

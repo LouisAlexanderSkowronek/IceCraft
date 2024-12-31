@@ -1,5 +1,7 @@
 #include "IceCraft/player.h"
 
+extern int gravity_enabled;
+
 void init_player(struct Player *player)
 {
     init_camera(&player->camera);
@@ -9,6 +11,11 @@ void init_player(struct Player *player)
 
 void update_player(struct Player *player, struct Chunk *chunk, double delta)
 {
+    if (!gravity_enabled)
+    {
+        return;
+    }
+    
     player->camera.position[1] += player->velocity_y * delta;
     player->velocity_y -= 9.81 * delta;
 

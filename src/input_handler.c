@@ -10,13 +10,15 @@ static double remaining_time_block_placement_blocked = 0.0;
 static double remaining_time_block_breaking_blocked = 0.0;
 static double remaining_time_jumping_blocked = 0.0;
 
+extern int gravity_enabled;
+
 void processInput(GLFWwindow *window, struct GUIBlockSelector *hud, struct Player *player, struct World *world, int *show_coordinate_axes, int *c_key_is_blocked, int *space_key_is_blocked, const float delta)
 {
     remaining_time_block_breaking_blocked -= delta;
     remaining_time_block_placement_blocked -= delta;
     remaining_time_jumping_blocked -= delta;
 
-    if (remaining_time_jumping_blocked < 0.0)
+    if (gravity_enabled && remaining_time_jumping_blocked < 0.0)
     {
         *space_key_is_blocked = 0;
     }
@@ -66,8 +68,44 @@ void processInput(GLFWwindow *window, struct GUIBlockSelector *hud, struct Playe
         {
             unsigned selected_block_idx = closest_block_to_player(selected_blocks, count, world->chunk, player->camera.position);
             struct Block *selected_block = world->chunk->blocks + selected_block_idx;
-            add_block_to_chunk(selected_block->x, selected_block->y + 1, selected_block->z, material_id, world->chunk);
+            const enum BlockFace face = player_looks_at_face(player, selected_block);
+
+            float new_x = selected_block->x, new_y = selected_block->y, new_z = selected_block->z;
+            switch (face)
+            {
+                case LEFT:
+                    new_x += -1.0f;
+                    break;
+
+                case RIGHT:
+                    new_x += +1.0f;
+                    break;
+                               
+                case TOP:
+                    new_y += +1.0f;
+                    break;
+
+                case BOTTOM:
+                    new_y += -1.0f;
+                    break;
+
+                case FRONT:
+                    new_z += +1.0f;
+                    break;
+
+                case BACK:
+                    new_z += -1.0f;
+                    break;
+                
+                default: break;
+            }
+                
             remaining_time_block_placement_blocked = 0.5;
+
+            if (new_x >= 0.0f && new_x <= 15.0f && new_z <= 0.0f && new_z >= -15.0f)
+            {
+                add_block_to_chunk(new_x, new_y, new_z, material_id, world->chunk);
+            }
         }
     }
 
@@ -113,7 +151,7 @@ void processInput(GLFWwindow *window, struct GUIBlockSelector *hud, struct Playe
         move_camera(&player->camera, (vec3){ right[0] * CAMERA_SPEED * delta, 0.0f, right[2] * CAMERA_SPEED * delta });
     }
 
-    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS && !(*space_key_is_blocked) && player->can_jump)
+    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS && (!gravity_enabled || (!(*space_key_is_blocked) && player->can_jump)))
     {
         move_camera(&player->camera, (vec3){ 0.0f, CAMERA_SPEED * delta, 0.0f });
         player->velocity_y += 5.0f;

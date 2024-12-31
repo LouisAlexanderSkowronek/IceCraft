@@ -8,6 +8,7 @@
 #include "cglm/cglm.h"
 
 struct Chunk;
+struct Player;
 
 
 #define BLOCK_N_VERTICES 36
@@ -20,6 +21,16 @@ struct Block
     struct BlockVertex *vertices;
 };
 
+enum BlockFace
+{
+    LEFT,
+    RIGHT,
+    TOP,
+    BOTTOM,
+    FRONT,
+    BACK,
+    OTHER_OR_NONE
+};
 
 struct Block generate_block(float x, float y, float z, unsigned material_id, struct BlockVertex *vertices);
 
@@ -32,3 +43,5 @@ int player_looks_at_block(vec3 player_pos, vec3 player_looking_direction, struct
 unsigned *blocks_player_looks_at(vec3 player_pos, vec3 player_looking_direction, struct Chunk *chunk, unsigned *count);
 
 unsigned closest_block_to_player(unsigned *selected_blocks, unsigned n_selected_blocks, struct Chunk *chunk, vec3 player_position);
+
+enum BlockFace player_looks_at_face(struct Player *player, struct Block *block);
