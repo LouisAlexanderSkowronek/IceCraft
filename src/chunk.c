@@ -58,6 +58,21 @@ void add_block_to_chunk(float global_x, float global_y, float global_z, unsigned
     generate_chunk_vao_and_vbo(&chunk->VAO, &chunk->VBO, chunk);
 }
 
+unsigned get_block_located_at(float x, float y, float z, struct Chunk *chunk)
+{
+    unsigned i;
+    for (i = 0; i < chunk->placed_blocks; i++)
+    {
+        if (chunk->blocks[i].x == x && chunk->blocks[i].y == y && chunk->blocks[i].z == z)
+        {
+            return i;
+        }
+    }
+
+    fprintf(stderr, "Tried to get index of block at (%f | %f | %f) that doesn't exist!\n", x, y, z);
+    exit(EXIT_FAILURE);
+}
+
 
 void remove_block_from_chunk(unsigned index, struct Chunk *chunk)
 {

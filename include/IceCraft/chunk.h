@@ -22,6 +22,8 @@ void add_block_to_chunk(float x, float y, float z, unsigned texture_id, struct C
 
 void remove_block_from_chunk(unsigned index, struct Chunk *chunk);
 
+unsigned get_block_located_at(float x, float y, float z, struct Chunk *chunk);
+
 int block_does_exist(float x, float y, float z, struct Chunk *chunk);
 
 void generate_chunk_vao_and_vbo(unsigned *VAO_ptr, unsigned *VBO_ptr, struct Chunk *chunk);

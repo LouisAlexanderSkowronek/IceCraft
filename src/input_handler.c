@@ -3,8 +3,14 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include <string.h>
+#include <unistd.h>
+#include <arpa/inet.h>
+
 #include "IceCraft/player.h"
 #include "IceCraft/gui_block_selector.h"
+
+#define BUFFER_SIZE 1024
 
 static double remaining_time_block_placement_blocked = 0.0;
 static double remaining_time_block_breaking_blocked = 0.0;
@@ -12,7 +18,7 @@ static double remaining_time_jumping_blocked = 0.0;
 
 extern int gravity_enabled;
 
-void processInput(GLFWwindow *window, struct GUIBlockSelector *hud, struct Player *player, struct World *world, int *show_coordinate_axes, int *c_key_is_blocked, int *space_key_is_blocked, const float delta)
+void processInput(GLFWwindow *window, struct GUIBlockSelector *hud, struct Player *player, int sock, struct World *world, int *show_coordinate_axes, int *c_key_is_blocked, int *space_key_is_blocked, const float delta)
 {
     remaining_time_block_breaking_blocked -= delta;
     remaining_time_block_placement_blocked -= delta;
@@ -105,6 +111,27 @@ void processInput(GLFWwindow *window, struct GUIBlockSelector *hud, struct Playe
             if (new_x >= 0.0f && new_x <= 15.0f && new_z <= 0.0f && new_z >= -15.0f)
             {
                 add_block_to_chunk(new_x, new_y, new_z, material_id, world->chunk);
+
+                char buffer[1024];
+                sprintf(buffer, "place %d %d %d %u", (int) new_x, (int) new_y, (int) new_z, material_id);
+                if (send(sock, buffer, strlen(buffer), 0) == -1)
+                {
+                    fprintf(stderr, "Failed to send message: %s\n", buffer);
+                    exit(EXIT_FAILURE);
+                }
+
+                ssize_t received = recv(sock, buffer, BUFFER_SIZE-1, 0);
+                if (received == -1)
+                {
+                    fprintf(stderr, "Failed to receive response!\n");
+                    exit(EXIT_FAILURE);
+                } else if (received == 0) {
+                    printf("Server closed the connection.\n");
+                    exit(EXIT_SUCCESS);
+                }
+
+                buffer[received] = '\0'; // Null-terminate the received data
+                printf("Server: %s\n", buffer);
             }
         }
     }
@@ -119,6 +146,29 @@ void processInput(GLFWwindow *window, struct GUIBlockSelector *hud, struct Playe
             unsigned selected_block = closest_block_to_player(selected_blocks, count, world->chunk, player->camera.position);
             remove_block_from_chunk(selected_block, world->chunk);
             remaining_time_block_breaking_blocked = 0.5;
+
+            struct Block *block = world->chunk->blocks + selected_block;
+
+            char buffer[1024];
+            sprintf(buffer, "destroy %d %d %d", (int) block->x, (int) block->y, (int) block->z);
+            if (send(sock, buffer, strlen(buffer), 0) == -1)
+            {
+                fprintf(stderr, "Failed to send message: %s\n", buffer);
+                exit(EXIT_FAILURE);
+            }
+
+            ssize_t received = recv(sock, buffer, BUFFER_SIZE-1, 0);
+            if (received == -1)
+            {
+                fprintf(stderr, "Failed to receive response!\n");
+                exit(EXIT_FAILURE);
+            } else if (received == 0) {
+                printf("Server closed the connection.\n");
+                exit(EXIT_SUCCESS);
+            }
+
+            buffer[received] = '\0'; // Null-terminate the received data
+            printf("Server: %s\n", buffer);
         }
 
         free(selected_blocks);
