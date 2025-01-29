@@ -23,7 +23,7 @@ set(SRCS
     "${CMAKE_SOURCE_DIR}/src/bote.c"
 )
 
-add_subdirectory( glfw glfw/src )
+add_subdirectory( lib/glfw lib/glfw/src )
 
 add_subdirectory( "${CMAKE_SOURCE_DIR}/lib/cglm" )
 
