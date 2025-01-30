@@ -20,7 +20,7 @@ set(SRCS
     "${CMAKE_SOURCE_DIR}/src/gui_block_selector.c"
     "${CMAKE_SOURCE_DIR}/src/gui_crossbar.c"
     "${CMAKE_SOURCE_DIR}/src/player.c"
-    "${CMAKE_SOURCE_DIR}/src/bote.c"
+    "${CMAKE_SOURCE_DIR}/src/ice_craft.c"
 )
 
 add_subdirectory( lib/glfw lib/glfw/src )

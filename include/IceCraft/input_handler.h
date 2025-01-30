@@ -1,10 +1,5 @@
 #pragma once
 
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
+#include "ice_craft.h"
 
-#include "IceCraft/player.h"
-#include "IceCraft/world.h"
-#include "IceCraft/gui_block_selector.h"
-
-void processInput(GLFWwindow *window, struct GUIBlockSelector *hud, struct Player *player, int sock, struct World *world, int *show_coordinate_axes, int *c_key_is_blocked, int *space_key_is_blocked, const float delta);
+void process_input(struct IceCraft *ice_craft, const float delta);

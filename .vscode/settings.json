@@ -9,6 +9,9 @@
         "limits": "c",
         "coordinate_axes.h": "c",
         "input_handler.h": "c",
-        "gui_block_selector.h": "c"
+        "gui_block_selector.h": "c",
+        "opengl_utils.h": "c",
+        "helper_funcs.h": "c",
+        "ice_craft.h": "c"
     }
 }
