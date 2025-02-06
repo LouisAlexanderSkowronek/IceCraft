@@ -1,6 +1,7 @@
 #pragma once
 
 #include "block.h"
+#include "texture_atlas.h"
 
 #define CHUNK_WIDTH 16
 #define CHUNK_DEPTH 16
@@ -18,7 +19,7 @@ struct Chunk
 
 void init_chunk(float x, float z, struct Chunk *chunk, unsigned block_capacity);
 
-void add_block_to_chunk(float x, float y, float z, unsigned texture_id, struct Chunk *chunk);
+void add_block_to_chunk(float x, float y, float z, unsigned texture_id, struct Chunk *chunk, struct TextureAtlas *texture_atlas);
 
 void remove_block_from_chunk(unsigned index, struct Chunk *chunk);
 

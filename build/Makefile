@@ -558,6 +558,30 @@ src/player.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/IceCraft.dir/build.make CMakeFiles/IceCraft.dir/src/player.c.s
 .PHONY : src/player.c.s
 
+src/texture_atlas.o: src/texture_atlas.c.o
+.PHONY : src/texture_atlas.o
+
+# target to build an object file
+src/texture_atlas.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/IceCraft.dir/build.make CMakeFiles/IceCraft.dir/src/texture_atlas.c.o
+.PHONY : src/texture_atlas.c.o
+
+src/texture_atlas.i: src/texture_atlas.c.i
+.PHONY : src/texture_atlas.i
+
+# target to preprocess a source file
+src/texture_atlas.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/IceCraft.dir/build.make CMakeFiles/IceCraft.dir/src/texture_atlas.c.i
+.PHONY : src/texture_atlas.c.i
+
+src/texture_atlas.s: src/texture_atlas.c.s
+.PHONY : src/texture_atlas.s
+
+# target to generate assembly for a file
+src/texture_atlas.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/IceCraft.dir/build.make CMakeFiles/IceCraft.dir/src/texture_atlas.c.s
+.PHONY : src/texture_atlas.c.s
+
 src/world.o: src/world.c.o
 .PHONY : src/world.o
 
@@ -640,6 +664,9 @@ help:
 	@echo "... src/player.o"
 	@echo "... src/player.i"
 	@echo "... src/player.s"
+	@echo "... src/texture_atlas.o"
+	@echo "... src/texture_atlas.i"
+	@echo "... src/texture_atlas.s"
 	@echo "... src/world.o"
 	@echo "... src/world.i"
 	@echo "... src/world.s"

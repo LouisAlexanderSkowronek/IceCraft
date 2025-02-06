@@ -78,6 +78,7 @@ CMakeFiles/IceCraft.dir/src/block.c.o: /home/louis-alexander-skowronek/Desktop/I
   /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/helper_funcs.h \
   /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/player.h \
   /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/point.h \
+  /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/texture_atlas.h \
   /home/louis-alexander-skowronek/Desktop/IceCraft/lib/cglm/include/cglm/aabb2d.h \
   /home/louis-alexander-skowronek/Desktop/IceCraft/lib/cglm/include/cglm/affine-mat.h \
   /home/louis-alexander-skowronek/Desktop/IceCraft/lib/cglm/include/cglm/affine-post.h \
@@ -366,6 +367,7 @@ CMakeFiles/IceCraft.dir/src/chunk.c.o: /home/louis-alexander-skowronek/Desktop/I
   /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/block.h \
   /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/block_vertex.h \
   /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/chunk.h \
+  /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/texture_atlas.h \
   /home/louis-alexander-skowronek/Desktop/IceCraft/lib/cglm/include/cglm/aabb2d.h \
   /home/louis-alexander-skowronek/Desktop/IceCraft/lib/cglm/include/cglm/affine-mat.h \
   /home/louis-alexander-skowronek/Desktop/IceCraft/lib/cglm/include/cglm/affine-post.h \
@@ -706,6 +708,7 @@ CMakeFiles/IceCraft.dir/src/ice_craft.c.o: /home/louis-alexander-skowronek/Deskt
   /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/opengl_utils.h \
   /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/player.h \
   /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/point.h \
+  /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/texture_atlas.h \
   /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/world.h \
   /home/louis-alexander-skowronek/Desktop/IceCraft/lib/cglm/include/cglm/aabb2d.h \
   /home/louis-alexander-skowronek/Desktop/IceCraft/lib/cglm/include/cglm/affine-mat.h \
@@ -870,6 +873,7 @@ CMakeFiles/IceCraft.dir/src/input_handler.c.o: /home/louis-alexander-skowronek/D
   /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/input_handler.h \
   /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/line_vertex.h \
   /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/player.h \
+  /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/texture_atlas.h \
   /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/world.h \
   /home/louis-alexander-skowronek/Desktop/IceCraft/lib/cglm/include/cglm/aabb2d.h \
   /home/louis-alexander-skowronek/Desktop/IceCraft/lib/cglm/include/cglm/affine-mat.h \
@@ -1059,6 +1063,7 @@ CMakeFiles/IceCraft.dir/src/main.c.o: /home/louis-alexander-skowronek/Desktop/Ic
   /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/ice_craft.h \
   /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/line_vertex.h \
   /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/player.h \
+  /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/texture_atlas.h \
   /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/world.h \
   /home/louis-alexander-skowronek/Desktop/IceCraft/lib/cglm/include/cglm/aabb2d.h \
   /home/louis-alexander-skowronek/Desktop/IceCraft/lib/cglm/include/cglm/affine-mat.h \
@@ -1278,6 +1283,7 @@ CMakeFiles/IceCraft.dir/src/player.c.o: /home/louis-alexander-skowronek/Desktop/
   /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/camera.h \
   /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/chunk.h \
   /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/player.h \
+  /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/texture_atlas.h \
   /home/louis-alexander-skowronek/Desktop/IceCraft/lib/cglm/include/cglm/aabb2d.h \
   /home/louis-alexander-skowronek/Desktop/IceCraft/lib/cglm/include/cglm/affine-mat.h \
   /home/louis-alexander-skowronek/Desktop/IceCraft/lib/cglm/include/cglm/affine-post.h \
@@ -1419,10 +1425,71 @@ CMakeFiles/IceCraft.dir/src/player.c.o: /home/louis-alexander-skowronek/Desktop/
   /usr/lib/gcc/x86_64-linux-gnu/13/include/stdint.h \
   /usr/lib/gcc/x86_64-linux-gnu/13/include/xmmintrin.h
 
+CMakeFiles/IceCraft.dir/src/texture_atlas.c.o: /home/louis-alexander-skowronek/Desktop/IceCraft/src/texture_atlas.c \
+  /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/block_vertex.h \
+  /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/helper_funcs.h \
+  /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/point.h \
+  /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/texture_atlas.h \
+  /usr/include/alloca.h \
+  /usr/include/endian.h \
+  /usr/include/features-time64.h \
+  /usr/include/features.h \
+  /usr/include/stdc-predef.h \
+  /usr/include/stdio.h \
+  /usr/include/stdlib.h \
+  /usr/include/x86_64-linux-gnu/bits/atomic_wide_counter.h \
+  /usr/include/x86_64-linux-gnu/bits/byteswap.h \
+  /usr/include/x86_64-linux-gnu/bits/endian.h \
+  /usr/include/x86_64-linux-gnu/bits/endianness.h \
+  /usr/include/x86_64-linux-gnu/bits/floatn-common.h \
+  /usr/include/x86_64-linux-gnu/bits/floatn.h \
+  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
+  /usr/include/x86_64-linux-gnu/bits/long-double.h \
+  /usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h \
+  /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h \
+  /usr/include/x86_64-linux-gnu/bits/select.h \
+  /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
+  /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
+  /usr/include/x86_64-linux-gnu/bits/struct_mutex.h \
+  /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h \
+  /usr/include/x86_64-linux-gnu/bits/thread-shared-types.h \
+  /usr/include/x86_64-linux-gnu/bits/time64.h \
+  /usr/include/x86_64-linux-gnu/bits/timesize.h \
+  /usr/include/x86_64-linux-gnu/bits/types.h \
+  /usr/include/x86_64-linux-gnu/bits/types/FILE.h \
+  /usr/include/x86_64-linux-gnu/bits/types/__FILE.h \
+  /usr/include/x86_64-linux-gnu/bits/types/__fpos64_t.h \
+  /usr/include/x86_64-linux-gnu/bits/types/__fpos_t.h \
+  /usr/include/x86_64-linux-gnu/bits/types/__mbstate_t.h \
+  /usr/include/x86_64-linux-gnu/bits/types/__sigset_t.h \
+  /usr/include/x86_64-linux-gnu/bits/types/clock_t.h \
+  /usr/include/x86_64-linux-gnu/bits/types/clockid_t.h \
+  /usr/include/x86_64-linux-gnu/bits/types/cookie_io_functions_t.h \
+  /usr/include/x86_64-linux-gnu/bits/types/sigset_t.h \
+  /usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h \
+  /usr/include/x86_64-linux-gnu/bits/types/struct_timespec.h \
+  /usr/include/x86_64-linux-gnu/bits/types/struct_timeval.h \
+  /usr/include/x86_64-linux-gnu/bits/types/time_t.h \
+  /usr/include/x86_64-linux-gnu/bits/types/timer_t.h \
+  /usr/include/x86_64-linux-gnu/bits/typesizes.h \
+  /usr/include/x86_64-linux-gnu/bits/uintn-identity.h \
+  /usr/include/x86_64-linux-gnu/bits/waitflags.h \
+  /usr/include/x86_64-linux-gnu/bits/waitstatus.h \
+  /usr/include/x86_64-linux-gnu/bits/wordsize.h \
+  /usr/include/x86_64-linux-gnu/gnu/stubs-64.h \
+  /usr/include/x86_64-linux-gnu/gnu/stubs.h \
+  /usr/include/x86_64-linux-gnu/sys/cdefs.h \
+  /usr/include/x86_64-linux-gnu/sys/select.h \
+  /usr/include/x86_64-linux-gnu/sys/types.h \
+  /usr/lib/gcc/x86_64-linux-gnu/13/include/stdarg.h \
+  /usr/lib/gcc/x86_64-linux-gnu/13/include/stddef.h
+
 CMakeFiles/IceCraft.dir/src/world.c.o: /home/louis-alexander-skowronek/Desktop/IceCraft/src/world.c \
   /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/block.h \
   /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/block_vertex.h \
   /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/chunk.h \
+  /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/texture_atlas.h \
   /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/world.h \
   /home/louis-alexander-skowronek/Desktop/IceCraft/lib/cglm/include/cglm/aabb2d.h \
   /home/louis-alexander-skowronek/Desktop/IceCraft/lib/cglm/include/cglm/affine-mat.h \
@@ -1593,8 +1660,6 @@ CMakeFiles/IceCraft.dir/src/world.c.o: /home/louis-alexander-skowronek/Desktop/I
 
 /usr/include/x86_64-linux-gnu/asm/posix_types.h:
 
-/usr/include/ctype.h:
-
 /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/world.h:
 
 /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/input_handler.h:
@@ -1677,6 +1742,10 @@ CMakeFiles/IceCraft.dir/src/world.c.o: /home/louis-alexander-skowronek/Desktop/I
 
 /home/louis-alexander-skowronek/Desktop/IceCraft/lib/cglm/include/cglm/clipspace/persp_rh_no.h:
 
+/home/louis-alexander-skowronek/Desktop/IceCraft/lib/cglm/include/cglm/sphere.h:
+
+/usr/include/x86_64-linux-gnu/bits/waitflags.h:
+
 /usr/include/x86_64-linux-gnu/bits/types/time_t.h:
 
 /usr/include/x86_64-linux-gnu/asm/bitsperlong.h:
@@ -1714,6 +1783,8 @@ CMakeFiles/IceCraft.dir/src/world.c.o: /home/louis-alexander-skowronek/Desktop/I
 /usr/include/x86_64-linux-gnu/bits/types/__fpos64_t.h:
 
 /home/louis-alexander-skowronek/Desktop/IceCraft/lib/cglm/include/cglm/clipspace/persp.h:
+
+/home/louis-alexander-skowronek/Desktop/IceCraft/src/texture_atlas.c:
 
 /usr/include/asm-generic/posix_types.h:
 
@@ -1782,6 +1853,10 @@ CMakeFiles/IceCraft.dir/src/world.c.o: /home/louis-alexander-skowronek/Desktop/I
 /usr/include/strings.h:
 
 /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/block_vertex.h:
+
+/usr/include/ctype.h:
+
+/home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/texture_atlas.h:
 
 /home/louis-alexander-skowronek/Desktop/IceCraft/lib/glad/include/glad/glad.h:
 
@@ -1984,7 +2059,3 @@ CMakeFiles/IceCraft.dir/src/world.c.o: /home/louis-alexander-skowronek/Desktop/I
 /usr/include/x86_64-linux-gnu/bits/unistd_ext.h:
 
 /home/louis-alexander-skowronek/Desktop/IceCraft/lib/cglm/include/cglm/simd/sse2/quat.h:
-
-/usr/include/x86_64-linux-gnu/bits/waitflags.h:
-
-/home/louis-alexander-skowronek/Desktop/IceCraft/lib/cglm/include/cglm/sphere.h:

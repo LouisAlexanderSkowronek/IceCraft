@@ -141,6 +141,7 @@ void handle_key_place(struct IceCraft *ice_craft)
         case 3: material_id = 2; break;
         case 4: material_id = 3; break;
         case 5: material_id = 5; break;
+        case 6: material_id = 6; break;
     }
 
     unsigned count;
@@ -189,7 +190,7 @@ void handle_key_place(struct IceCraft *ice_craft)
 
     if (new_x >= 0.0f && new_x <= 15.0f && new_z <= 0.0f && new_z >= -15.0f)
     {
-        add_block_to_chunk(new_x, new_y, new_z, material_id, ice_craft->world.chunk);
+        add_block_to_chunk(new_x, new_y, new_z, material_id, ice_craft->world.chunk, &ice_craft->texture_atlas);
     }
 }
 

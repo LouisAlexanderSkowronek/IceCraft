@@ -21,6 +21,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/louis-alexander-skowronek/Desktop/IceCraft/src/main.c" "CMakeFiles/IceCraft.dir/src/main.c.o" "gcc" "CMakeFiles/IceCraft.dir/src/main.c.o.d"
   "/home/louis-alexander-skowronek/Desktop/IceCraft/src/opengl_utils.c" "CMakeFiles/IceCraft.dir/src/opengl_utils.c.o" "gcc" "CMakeFiles/IceCraft.dir/src/opengl_utils.c.o.d"
   "/home/louis-alexander-skowronek/Desktop/IceCraft/src/player.c" "CMakeFiles/IceCraft.dir/src/player.c.o" "gcc" "CMakeFiles/IceCraft.dir/src/player.c.o.d"
+  "/home/louis-alexander-skowronek/Desktop/IceCraft/src/texture_atlas.c" "CMakeFiles/IceCraft.dir/src/texture_atlas.c.o" "gcc" "CMakeFiles/IceCraft.dir/src/texture_atlas.c.o.d"
   "/home/louis-alexander-skowronek/Desktop/IceCraft/src/world.c" "CMakeFiles/IceCraft.dir/src/world.c.o" "gcc" "CMakeFiles/IceCraft.dir/src/world.c.o.d"
   )
 

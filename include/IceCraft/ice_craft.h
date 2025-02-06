@@ -10,6 +10,7 @@
 #include "gui_block_selector.h"
 #include "gui_crossbar.h"
 #include "player.h"
+#include "texture_atlas.h"
 
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 800
@@ -25,7 +26,7 @@ struct IceCraft
     unsigned coord_axes_shader_program;
     unsigned hud_shader_program;
 
-    unsigned texture_atlas;
+    struct TextureAtlas texture_atlas;
 
     struct Player louis;
 

@@ -18,7 +18,7 @@ void init_chunk(float x, float z, struct Chunk *chunk, unsigned block_capacity)
     generate_chunk_vao_and_vbo(&chunk->VAO, &chunk->VBO, chunk);
 }
 
-void add_block_to_chunk(float global_x, float global_y, float global_z, unsigned texture_id, struct Chunk *chunk)
+void add_block_to_chunk(float global_x, float global_y, float global_z, unsigned texture_id, struct Chunk *chunk, struct TextureAtlas *texture_atlas)
 {
     if (block_does_exist(global_x, global_y, global_z, chunk))
     {
@@ -51,7 +51,17 @@ void add_block_to_chunk(float global_x, float global_y, float global_z, unsigned
         chunk->vertices = new_vertices;
     }
 
-    chunk->blocks[chunk->placed_blocks] = generate_block(global_x, global_y, global_z, texture_id, chunk->vertices + chunk->placed_blocks*BLOCK_N_VERTICES);
+    struct TextureBounds texture_bounds;
+    texture_atlas_get_texture_uv(texture_atlas, texture_id, &texture_bounds);
+
+    chunk->blocks[chunk->placed_blocks] = generate_block(
+        global_x,
+        global_y,
+        global_z,
+        texture_id,
+        chunk->vertices + chunk->placed_blocks*BLOCK_N_VERTICES,
+        &texture_bounds
+    );
 
     chunk->placed_blocks++;
 

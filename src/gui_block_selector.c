@@ -54,6 +54,7 @@ void generate_hud(struct GUIBlockSelector *hud)
     draw_rect(-0.2f, -0.8f, 0.6f, 0.6f, 0.9f, hud->vertices + 18);
     draw_rect(+0.0f, -0.8f, dirt_r - 0.3f, dirt_g - 0.1f, 0.0f, hud->vertices + 24);
     draw_rect(+0.2f, -0.8f, 0.3f, 0.2f, 0.3f, hud->vertices + 30);
+    draw_rect(+0.4f, -0.8f, 0.9f, 0.9f, 1.0f, hud->vertices + 36);
 
     hud_select_item(0, hud);
 
@@ -86,7 +87,7 @@ void hud_update_vao_and_vbo(struct GUIBlockSelector *hud)
 
 void hud_select_item(unsigned index, struct GUIBlockSelector *hud)
 {
-    const unsigned max_index = 5;
+    const unsigned max_index = HUD_N_ITEM_SLOTS - 1;
 
     if (index > max_index)
     {

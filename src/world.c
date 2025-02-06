@@ -4,11 +4,12 @@
 #include <GLFW/glfw3.h>
 
 #include "IceCraft/chunk.h"
+#include "IceCraft/texture_atlas.h"
 
 #include <stdio.h>
 
 
-void generate_flat_world(struct World *world)
+void generate_flat_world(struct World *world, struct TextureAtlas *texture_atlas)
 {
     world->chunk = (struct Chunk*) malloc(sizeof(struct Chunk));
     if (!world->chunk)
@@ -25,7 +26,7 @@ void generate_flat_world(struct World *world)
         {
             for (int x = 0; x < 16; x++)
             {
-                add_block_to_chunk(x, y, -z, 0, world->chunk);
+                add_block_to_chunk(x, y, -z, 0, world->chunk, texture_atlas);
             }
         }
     }
@@ -34,7 +35,7 @@ void generate_flat_world(struct World *world)
     {
         for (int x = 0; x < 16; x++)
         {
-            add_block_to_chunk(x, 3, -z, 4, world->chunk);
+            add_block_to_chunk(x, 3, -z, 4, world->chunk, texture_atlas);
         }
     }
 }

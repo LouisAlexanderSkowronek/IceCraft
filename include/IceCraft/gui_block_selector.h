@@ -5,9 +5,9 @@
 
 #include "gui_block_selector_vertex.h"
 
-#define HUD_N_VERTICES 39
+#define HUD_N_VERTICES 45
 #define HUD_VERTICES_SIZE (HUD_N_VERTICES * sizeof(struct GUIBlockSelectorVertex))
-#define HUD_N_ITEM_SLOTS 6
+#define HUD_N_ITEM_SLOTS 7
 
 struct GUIBlockSelector
 {

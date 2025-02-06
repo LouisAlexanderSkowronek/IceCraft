@@ -1,6 +1,7 @@
 #pragma once
 
 #include "block_vertex.h"
+#include "texture_atlas.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -32,7 +33,7 @@ enum BlockFace
     OTHER_OR_NONE
 };
 
-struct Block generate_block(float x, float y, float z, unsigned material_id, struct BlockVertex *vertices);
+struct Block generate_block(float x, float y, float z, unsigned material_id, struct BlockVertex *vertices, struct TextureBounds *texture_bounds);
 
 
 // Note: Block edge size is assumed to be 1.0f (0.5f in all directions from center).

@@ -21,6 +21,7 @@ set(SRCS
     "${CMAKE_SOURCE_DIR}/src/gui_crossbar.c"
     "${CMAKE_SOURCE_DIR}/src/player.c"
     "${CMAKE_SOURCE_DIR}/src/ice_craft.c"
+    "${CMAKE_SOURCE_DIR}/src/texture_atlas.c"
 )
 
 add_subdirectory( lib/glfw lib/glfw/src )

@@ -145,6 +145,7 @@ CMakeFiles/IceCraft.dir/src/ice_craft.c.o: \
  /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/chunk.h \
  /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/block.h \
  /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/block_vertex.h \
+ /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/texture_atlas.h \
  /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/gui_block_selector.h \
  /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/gui_block_selector_vertex.h \
  /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/gui_crossbar.h \

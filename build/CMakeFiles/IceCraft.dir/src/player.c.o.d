@@ -139,4 +139,5 @@ CMakeFiles/IceCraft.dir/src/player.c.o: \
  /home/louis-alexander-skowronek/Desktop/IceCraft/lib/cglm/include/cglm/affine2d.h \
  /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/chunk.h \
  /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/block.h \
- /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/block_vertex.h
+ /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/block_vertex.h \
+ /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/texture_atlas.h

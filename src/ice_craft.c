@@ -32,7 +32,15 @@ void init_ice_craft(struct IceCraft *ice_craft)
     ice_craft->coord_axes_shader_program = build_shader_program("../shaders/coord_axes/vertex_shader.glsl", "../shaders/coord_axes/fragment_shader.glsl");
     ice_craft->hud_shader_program = build_shader_program("../shaders/hud/vertex_shader.glsl", "../shaders/hud/fragment_shader.glsl");
 
-    ice_craft->texture_atlas = load_jpg_texture("../assets/textures/textures.jpg");
+    init_empty_texture_atlas(&ice_craft->texture_atlas, "../assets/textures/textures_extended.jpg");
+
+    texture_atlas_add_texture(&ice_craft->texture_atlas, 1.0f/4.0f, 0.0f/1.0f, 2.0f/4.0f, 1.0f/2.0f);
+    texture_atlas_add_texture(&ice_craft->texture_atlas, 0.0f/1.0f, 1.0f/2.0f, 1.0f/4.0f, 1.0f/1.0f);
+    texture_atlas_add_texture(&ice_craft->texture_atlas, 1.0f/4.0f, 1.0f/2.0f, 2.0f/4.0f, 1.0f/1.0f);
+    texture_atlas_add_texture(&ice_craft->texture_atlas, 0.0f/1.0f, 0.0f/1.0f, 1.0f/4.0f, 1.0f/2.0f);
+    texture_atlas_add_texture(&ice_craft->texture_atlas, 2.0f/4.0f, 0.0f/1.0f, 3.0f/4.0f, 1.0f/2.0f);
+    texture_atlas_add_texture(&ice_craft->texture_atlas, 2.0f/4.0f, 1.0f/2.0f, 3.0f/4.0f, 1.0f/1.0f);
+    texture_atlas_add_texture(&ice_craft->texture_atlas, 3.0f/4.0f, 0.0f/1.0f, 1.0f/1.0f, 1.0f/2.0f);
 
     init_player(&ice_craft->louis);
 
@@ -41,7 +49,9 @@ void init_ice_craft(struct IceCraft *ice_craft)
 
     ice_craft->show_coordinate_axes = 0;
 
-    generate_flat_world(&ice_craft->world);
+    generate_flat_world(&ice_craft->world , &ice_craft->texture_atlas);
+
+    add_block_to_chunk(3, 10, -5, 6, ice_craft->world.chunk, &ice_craft->texture_atlas);
 
     generate_coordinate_axes(&ice_craft->coordinate_axes);
     generate_hud(&ice_craft->block_selector);
@@ -57,7 +67,7 @@ void init_ice_craft(struct IceCraft *ice_craft)
 
     glm_perspective(glm_rad(45.0f), ((float) WINDOW_WIDTH) / ((float) WINDOW_HEIGHT), 0.1f, 100.0f, ice_craft->projection);
 
-    glBindTexture(GL_TEXTURE_2D, ice_craft->texture_atlas);
+    glBindTexture(GL_TEXTURE_2D, ice_craft->texture_atlas.texture_id);
 
     ice_craft->frames_since_last_update = 0;
     ice_craft->last_time = glfwGetTime();
@@ -187,6 +197,8 @@ void terminate_ice_craft(struct IceCraft *ice_craft)
     glDeleteProgram(ice_craft->coord_axes_shader_program);
 
     world_free_chunk(&ice_craft->world);
+
+    free_texture_atlas(&ice_craft->texture_atlas);
 
     glfwTerminate();
 }

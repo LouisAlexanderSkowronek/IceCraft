@@ -5,6 +5,7 @@ CMakeFiles/IceCraft.dir/src/world.c.o: \
  /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/chunk.h \
  /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/block.h \
  /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/block_vertex.h \
+ /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/texture_atlas.h \
  /usr/include/stdlib.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
  /usr/include/features.h /usr/include/features-time64.h \

@@ -6,6 +6,7 @@
 #include "IceCraft/chunk.h"
 #include "IceCraft/player.h"
 #include "IceCraft/helper_funcs.h"
+#include "IceCraft/texture_atlas.h"
 
 inline static void assign_point_to_vertex(const struct Point *p, struct BlockVertex *v)
 {
@@ -13,7 +14,7 @@ inline static void assign_point_to_vertex(const struct Point *p, struct BlockVer
 }
 
 
-struct Block generate_block(float x, float y, float z, unsigned material_id, struct BlockVertex *vertices)
+struct Block generate_block(float x, float y, float z, unsigned material_id, struct BlockVertex *vertices, struct TextureBounds *texture_bounds)
 {
     struct Block block;
     block.x = x;
@@ -21,49 +22,6 @@ struct Block generate_block(float x, float y, float z, unsigned material_id, str
     block.z = z;
     block.texture_id = material_id;
     block.vertices = vertices;
-
-    
-    float u_min, u_max, v_min, v_max;
-
-    switch (material_id)
-    {
-        case 0:
-            u_min = 1.0f / 3.0f;
-            u_max = 2.0f / 3.0f;
-            v_min = 0.0f;
-            v_max = 0.5f;
-            break;
-        case 1:
-            u_min = 0.0f;
-            u_max = 1.0f / 3.0f;
-            v_min = 0.5f;
-            v_max = 1.0f;
-            break;
-        case 2:
-            u_min = 1.0f / 3.0f;
-            u_max = 2.0f / 3.0f;
-            v_min = 0.5f;
-            v_max = 1.0f;
-            break;
-        case 3:
-            u_min = 0.0f;
-            u_max = 1.0f / 3.0f;
-            v_min = 0.0f;
-            v_max = 0.5f;
-            break;
-        case 4:
-            u_min = 2.0f / 3.0f;
-            u_max = 1.0f;
-            v_min = 0.0f;
-            v_max = 0.5f;
-            break;
-        case 5:
-            u_min = 2.0f / 3.0f;
-            u_max = 1.0f;
-            v_min = 0.5f;
-            v_max = 1.0f;
-            break;
-    }
 
     /*
        C - - - - B
@@ -88,7 +46,7 @@ struct Block generate_block(float x, float y, float z, unsigned material_id, str
 
     struct Point points[8] = { A, B, C, D, E, F, G, H };
 
-    generate_cube_vertices_from_points(vertices, points, u_min, u_max, v_min, v_max);
+    generate_cube_vertices_from_points(vertices, points, texture_bounds->u_min, texture_bounds->u_max, texture_bounds->v_min, texture_bounds->v_max);
 
     return block;
 }

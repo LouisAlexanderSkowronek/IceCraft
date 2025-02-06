@@ -25,6 +25,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/IceCraft.dir/src/opengl_utils.c.o.d"
   "CMakeFiles/IceCraft.dir/src/player.c.o"
   "CMakeFiles/IceCraft.dir/src/player.c.o.d"
+  "CMakeFiles/IceCraft.dir/src/texture_atlas.c.o"
+  "CMakeFiles/IceCraft.dir/src/texture_atlas.c.o.d"
   "CMakeFiles/IceCraft.dir/src/world.c.o"
   "CMakeFiles/IceCraft.dir/src/world.c.o.d"
   "IceCraft"
