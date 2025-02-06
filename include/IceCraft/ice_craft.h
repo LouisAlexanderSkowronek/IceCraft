@@ -17,6 +17,8 @@
 
 struct IceCraft
 {
+    int gravity_enabled;
+    
     GLFWwindow *window;
 
     unsigned world_shader_program;
@@ -50,6 +52,9 @@ struct IceCraft
     unsigned frames_since_last_update;
     double last_time;
     double time_of_last_update;
+    double remaining_time_block_placement_blocked;
+    double remaining_time_block_breaking_blocked;
+    double remaining_time_jumping_blocked;
 };
 
 void init_ice_craft(struct IceCraft *ice_craft);

@@ -18,6 +18,8 @@
 
 void init_ice_craft(struct IceCraft *ice_craft)
 {
+    ice_craft->gravity_enabled = 0;
+
     init_glfw();
 
     ice_craft->window = create_window(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE);
@@ -60,6 +62,9 @@ void init_ice_craft(struct IceCraft *ice_craft)
     ice_craft->frames_since_last_update = 0;
     ice_craft->last_time = glfwGetTime();
     ice_craft->time_of_last_update = ice_craft->last_time;
+    ice_craft->remaining_time_block_placement_blocked = 0.0;
+    ice_craft->remaining_time_block_breaking_blocked = 0.0;
+    ice_craft->remaining_time_jumping_blocked = 0.0;
 }
 
 
@@ -72,6 +77,9 @@ void run_ice_craft_main_loop(struct IceCraft *ice_craft)
         const double current_time = glfwGetTime();
         const double delta = current_time - ice_craft->last_time;
         ice_craft->last_time = current_time;
+        ice_craft->remaining_time_block_breaking_blocked -= delta;
+        ice_craft->remaining_time_block_placement_blocked -= delta;
+        ice_craft->remaining_time_jumping_blocked -= delta;
 
         if (current_time >= ice_craft->time_of_last_update + update_timeout)
         {
@@ -80,9 +88,17 @@ void run_ice_craft_main_loop(struct IceCraft *ice_craft)
             ice_craft->time_of_last_update = current_time;
         }
 
+        if (ice_craft->gravity_enabled && ice_craft->remaining_time_jumping_blocked < 0.0)
+        {
+            ice_craft->space_key_is_blocked = 0;
+        }
+
         process_input(ice_craft, delta);
 
-        update_player(&ice_craft->louis, ice_craft->world.chunk, delta);
+        if (ice_craft->gravity_enabled)
+        {
+            update_player(&ice_craft->louis, ice_craft->world.chunk, delta);
+        }
 
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

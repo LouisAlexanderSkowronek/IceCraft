@@ -16,4 +16,4 @@ void init_camera(struct Camera *camera);
 
 void move_camera(struct Camera *camera, vec3 offset);
 
-void rotate_camera(struct Camera *camera, vec2 rotation_offset);
+void rotate_camera(struct Camera *camera, float pitch_offset, float yaw_offset);

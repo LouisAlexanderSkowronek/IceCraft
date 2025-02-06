@@ -1,7 +1,5 @@
 #include "IceCraft/ice_craft.h"
 
-int gravity_enabled = 1;
-
 int main()
 {
     struct IceCraft ice_craft;

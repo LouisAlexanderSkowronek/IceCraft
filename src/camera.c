@@ -26,10 +26,10 @@ void move_camera(struct Camera *camera, vec3 offset)
     );
 }
 
-void rotate_camera(struct Camera *camera, vec2 rotation_offset)
+void rotate_camera(struct Camera *camera, float pitch_offset, float yaw_offset)
 {
-    camera->pitch += rotation_offset[0];
-    camera->yaw += rotation_offset[1];
+    camera->pitch += pitch_offset;
+    camera->yaw += yaw_offset;
 
     if (camera->pitch > 89.0f)
     {
