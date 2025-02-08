@@ -143,4 +143,10 @@ CMakeFiles/IceCraft.dir/src/world.c.o: \
  /home/louis-alexander-skowronek/Desktop/IceCraft/lib/cglm/include/cglm/affine2d.h \
  /home/louis-alexander-skowronek/Desktop/IceCraft/lib/glad/include/glad/glad.h \
  /home/louis-alexander-skowronek/Desktop/IceCraft/lib/glad/include/KHR/khrplatform.h \
- /home/louis-alexander-skowronek/Desktop/IceCraft/lib/glfw/include/GLFW/glfw3.h
+ /home/louis-alexander-skowronek/Desktop/IceCraft/lib/glfw/include/GLFW/glfw3.h \
+ /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/helper_funcs.h \
+ /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/point.h \
+ /usr/include/string.h \
+ /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
+ /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h \
+ /usr/include/strings.h

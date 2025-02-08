@@ -16,13 +16,23 @@ void process_input(struct IceCraft *ice_craft, float delta)
     if (glfwGetKey(ice_craft->window, GLFW_KEY_I) == GLFW_PRESS)
     {
         ice_craft->player_is_in_world = ICE_WORLD;
+        save_world(&ice_craft->world, "../assets/worlds/lobby.s");
+        world_free_chunk(&ice_craft->world);
+        free(ice_craft->world.modifications);
+        init_world(&ice_craft->world);
         generate_ice_world(&ice_craft->world, &ice_craft->texture_atlas);
+        load_changes_onto_world(&ice_craft->world, "../assets/worlds/ice_world.s", &ice_craft->texture_atlas);
     }
 
     if (glfwGetKey(ice_craft->window, GLFW_KEY_L) == GLFW_PRESS)
     {
         ice_craft->player_is_in_world = LOBBY;
+        save_world(&ice_craft->world, "../assets/worlds/ice_world.s");
+        world_free_chunk(&ice_craft->world);
+        free(ice_craft->world.modifications);
+        init_world(&ice_craft->world);
         generate_lobby_world(&ice_craft->world, &ice_craft->texture_atlas);
+        load_changes_onto_world(&ice_craft->world, "../assets/worlds/lobby.s", &ice_craft->texture_atlas);
     }
 
     if (glfwGetKey(ice_craft->window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -202,7 +212,7 @@ void handle_key_place(struct IceCraft *ice_craft)
 
     if (new_x >= 0.0f && new_x <= 15.0f && new_z <= 0.0f && new_z >= -15.0f)
     {
-        add_block_to_chunk(new_x, new_y, new_z, material_id, ice_craft->world.chunk, &ice_craft->texture_atlas);
+        world_place_block(&ice_craft->world, new_x, new_y, new_z, material_id, &ice_craft->texture_atlas);
     }
 }
 
@@ -220,7 +230,8 @@ void handle_key_destroy(struct IceCraft *ice_craft)
     if (count)
     {
         unsigned selected_block = closest_block_to_player(selected_blocks, count, ice_craft->world.chunk, ice_craft->louis.camera.position);
-        remove_block_from_chunk(selected_block, ice_craft->world.chunk);
+        struct Block *block = ice_craft->world.chunk->blocks + selected_block;
+        world_destroy_block_at_position(&ice_craft->world, block->x, block->y, block->z);
         ice_craft->remaining_time_block_breaking_blocked = 0.5;
     }
 

@@ -55,9 +55,11 @@ void init_ice_craft(struct IceCraft *ice_craft)
     if (ice_craft->player_is_in_world == LOBBY)
     {
         generate_lobby_world(&ice_craft->world , &ice_craft->texture_atlas);
+        load_changes_onto_world(&ice_craft->world, "../assets/worlds/lobby.s", &ice_craft->texture_atlas);
     } else if (ice_craft->player_is_in_world == ICE_WORLD)
     {
         generate_ice_world(&ice_craft->world, &ice_craft->texture_atlas);
+        load_changes_onto_world(&ice_craft->world, "../assets/worlds/ice_world.s", &ice_craft->texture_atlas);
     } else
     {
         fprintf(stderr, "You should never see this message! ice_craft->player_is_in_world has unexpected value: %u\n", ice_craft->player_is_in_world);
@@ -208,6 +210,18 @@ void terminate_ice_craft(struct IceCraft *ice_craft)
 
     glDeleteProgram(ice_craft->world_shader_program);
     glDeleteProgram(ice_craft->coord_axes_shader_program);
+
+    if (ice_craft->player_is_in_world == LOBBY)
+    {
+        save_world(&ice_craft->world, "../assets/worlds/lobby.s");
+    } else if (ice_craft->player_is_in_world == ICE_WORLD)
+    {
+        save_world(&ice_craft->world, "../assets/worlds/ice_world.s");
+    } else
+    {
+        fprintf(stderr, "You should never see this message here from terminate_ice_craft! Player is in unexpected world.\n");
+        exit(1);
+    }
 
     world_free_chunk(&ice_craft->world);
 
