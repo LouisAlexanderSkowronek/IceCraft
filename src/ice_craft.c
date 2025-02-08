@@ -20,6 +20,7 @@ void init_ice_craft(struct IceCraft *ice_craft)
 {
     ice_craft->gravity_enabled = 1;
     ice_craft->player_is_in_world = LOBBY;
+    ice_craft->player_can_go_to_ice_world = 1;
 
     init_glfw();
 
@@ -33,7 +34,7 @@ void init_ice_craft(struct IceCraft *ice_craft)
     ice_craft->coord_axes_shader_program = build_shader_program("../shaders/coord_axes/vertex_shader.glsl", "../shaders/coord_axes/fragment_shader.glsl");
     ice_craft->hud_shader_program = build_shader_program("../shaders/hud/vertex_shader.glsl", "../shaders/hud/fragment_shader.glsl");
 
-    init_empty_texture_atlas(&ice_craft->texture_atlas, "../assets/textures/textures_extended.jpg");
+    init_empty_texture_atlas(&ice_craft->texture_atlas, "../assets/textures/textures.jpg");
 
     texture_atlas_add_texture(&ice_craft->texture_atlas, 1.0f/4.0f, 0.0f/1.0f, 2.0f/4.0f, 1.0f/2.0f);
     texture_atlas_add_texture(&ice_craft->texture_atlas, 0.0f/1.0f, 1.0f/2.0f, 1.0f/4.0f, 1.0f/1.0f);

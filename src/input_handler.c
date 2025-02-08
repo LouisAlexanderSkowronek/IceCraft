@@ -13,7 +13,7 @@
 
 void process_input(struct IceCraft *ice_craft, float delta)
 {
-    if (glfwGetKey(ice_craft->window, GLFW_KEY_I) == GLFW_PRESS)
+    if (glfwGetKey(ice_craft->window, GLFW_KEY_I) == GLFW_PRESS && ice_craft->player_can_go_to_ice_world)
     {
         ice_craft->player_is_in_world = ICE_WORLD;
         save_world(&ice_craft->world, "../assets/worlds/lobby.s");
@@ -24,7 +24,7 @@ void process_input(struct IceCraft *ice_craft, float delta)
         load_changes_onto_world(&ice_craft->world, "../assets/worlds/ice_world.s", &ice_craft->texture_atlas);
     }
 
-    if (glfwGetKey(ice_craft->window, GLFW_KEY_L) == GLFW_PRESS)
+    if (glfwGetKey(ice_craft->window, GLFW_KEY_L) == GLFW_PRESS && ice_craft->player_can_go_to_ice_world)
     {
         ice_craft->player_is_in_world = LOBBY;
         save_world(&ice_craft->world, "../assets/worlds/ice_world.s");

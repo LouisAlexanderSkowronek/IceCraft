@@ -19,6 +19,7 @@
 struct IceCraft
 {
     int gravity_enabled;
+    int player_can_go_to_ice_world;
     enum WorldType player_is_in_world;
     
     GLFWwindow *window;
