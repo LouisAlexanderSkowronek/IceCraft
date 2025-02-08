@@ -18,7 +18,8 @@
 
 void init_ice_craft(struct IceCraft *ice_craft)
 {
-    ice_craft->gravity_enabled = 0;
+    ice_craft->gravity_enabled = 1;
+    ice_craft->player_is_in_world = LOBBY;
 
     init_glfw();
 
@@ -49,7 +50,19 @@ void init_ice_craft(struct IceCraft *ice_craft)
 
     ice_craft->show_coordinate_axes = 0;
 
-    generate_flat_world(&ice_craft->world , &ice_craft->texture_atlas);
+    init_world(&ice_craft->world);
+
+    if (ice_craft->player_is_in_world == LOBBY)
+    {
+        generate_lobby_world(&ice_craft->world , &ice_craft->texture_atlas);
+    } else if (ice_craft->player_is_in_world == ICE_WORLD)
+    {
+        generate_ice_world(&ice_craft->world, &ice_craft->texture_atlas);
+    } else
+    {
+        fprintf(stderr, "You should never see this message! ice_craft->player_is_in_world has unexpected value: %u\n", ice_craft->player_is_in_world);
+        exit(1);
+    }
 
     add_block_to_chunk(3, 10, -5, 6, ice_craft->world.chunk, &ice_craft->texture_atlas);
 

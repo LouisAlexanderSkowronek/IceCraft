@@ -28,20 +28,10 @@ void init_empty_texture_atlas(struct TextureAtlas *texture_atlas, const char *fi
 
 void texture_atlas_add_texture(struct TextureAtlas *texture_atlas, float u_min, float v_min, float u_max, float v_max)
 {
-    printf(
-        "Parameters:\nTexture atlas: {n_textures: %u, capacity: %u, texture_id: %u}\n"
-        "u_min: %f\nv_min: %f\nu_max: %f\nv_max: %f\n\n",
-        texture_atlas->n_textures,
-        texture_atlas->capacity,
-        texture_atlas->texture_id,
-        u_min, v_min, u_max, v_max
-    );
-
     if (texture_atlas->n_textures == texture_atlas->capacity)
     {
         printf("Doubling capacity ...\n");
         texture_atlas->capacity *= 2;
-        printf("Calling first realloc ...\n");
         struct TextureBounds *tmp = realloc(texture_atlas->texture_bounds, texture_atlas->capacity);
         if (!tmp)
         {
@@ -59,11 +49,8 @@ void texture_atlas_add_texture(struct TextureAtlas *texture_atlas, float u_min, 
             exit(1);
         }
 
-        printf("First realloc successful!\n");
-
         texture_atlas->texture_bounds = tmp;
 
-        printf("Calling second realloc ...\n");
         unsigned *tmp_indices = realloc(texture_atlas->indices, texture_atlas->capacity);
         if (!tmp)
         {
@@ -80,11 +67,8 @@ void texture_atlas_add_texture(struct TextureAtlas *texture_atlas, float u_min, 
             free(texture_atlas->indices);
             exit(1);
         }
-        printf("Second realloc successful!\n");
 
         texture_atlas->indices = tmp_indices;
-
-        printf("Capacity doubled!\n");
     }
 
     texture_atlas->texture_bounds[texture_atlas->n_textures].u_min = u_min;

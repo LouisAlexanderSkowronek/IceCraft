@@ -13,6 +13,18 @@
 
 void process_input(struct IceCraft *ice_craft, float delta)
 {
+    if (glfwGetKey(ice_craft->window, GLFW_KEY_I) == GLFW_PRESS)
+    {
+        ice_craft->player_is_in_world = ICE_WORLD;
+        generate_ice_world(&ice_craft->world, &ice_craft->texture_atlas);
+    }
+
+    if (glfwGetKey(ice_craft->window, GLFW_KEY_L) == GLFW_PRESS)
+    {
+        ice_craft->player_is_in_world = LOBBY;
+        generate_lobby_world(&ice_craft->world, &ice_craft->texture_atlas);
+    }
+
     if (glfwGetKey(ice_craft->window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
     {
         glfwSetWindowShouldClose(ice_craft->window, GL_TRUE);
