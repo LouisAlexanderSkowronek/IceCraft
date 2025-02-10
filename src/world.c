@@ -209,7 +209,7 @@ void generate_ice_world(struct World *world, struct TextureAtlas *texture_atlas)
 }
 
 
-void world_place_block(struct World *world, float x, float y, float z, unsigned texture_id, struct TextureAtlas *texture_atlas)
+void world_place_block(struct World *world, int x, int y, int z, unsigned texture_id, struct TextureAtlas *texture_atlas)
 {
     if (world->n_modifications == world->modification_capacity)
     {
@@ -237,7 +237,7 @@ void world_place_block(struct World *world, float x, float y, float z, unsigned 
 }
 
 
-void world_destroy_block_at_position(struct World *world, float x, float y, float z)
+void world_destroy_block_at_position(struct World *world, int x, int y, int z)
 {
     if (world->n_modifications == world->modification_capacity)
     {
@@ -263,7 +263,7 @@ void world_destroy_block_at_position(struct World *world, float x, float y, floa
     for (unsigned i = 0; i < world->chunk->placed_blocks; i++)
     {
         struct Block *block = world->chunk->blocks + i;
-        if (block->x == x && block->y == y && block->z == z)  // I know this is dangerous with floats. I am going to replace the data type with int
+        if (block->x == x && block->y == y && block->z == z)
         {
             remove_block_from_chunk(i, world->chunk);
         }

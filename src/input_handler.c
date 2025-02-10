@@ -178,31 +178,31 @@ void handle_key_place(struct IceCraft *ice_craft)
     struct Block *selected_block = ice_craft->world.chunk->blocks + selected_block_idx;
     const enum BlockFace face = player_looks_at_face(&ice_craft->louis, selected_block);
 
-    float new_x = selected_block->x, new_y = selected_block->y, new_z = selected_block->z;
+    int new_x = selected_block->x, new_y = selected_block->y, new_z = selected_block->z;
     switch (face)
     {
         case LEFT:
-            new_x += -1.0f;
+            new_x--;
             break;
 
         case RIGHT:
-            new_x += +1.0f;
+            new_x++;
             break;
                                
         case TOP:
-            new_y += +1.0f;
+            new_y++;
             break;
 
         case BOTTOM:
-            new_y += -1.0f;
+            new_y--;
             break;
 
         case FRONT:
-            new_z += +1.0f;
+            new_z++;
             break;
 
         case BACK:
-            new_z += -1.0f;
+            new_z--;
             break;
                 
         default: break;
@@ -210,7 +210,7 @@ void handle_key_place(struct IceCraft *ice_craft)
                 
     ice_craft->remaining_time_block_placement_blocked = 0.5;
 
-    if (new_x >= 0.0f && new_x <= 15.0f && new_z <= 0.0f && new_z >= -15.0f)
+    if (new_x >= 0 && new_x <= 15 && new_z <= 0 && new_z >= -15)
     {
         world_place_block(&ice_craft->world, new_x, new_y, new_z, material_id, &ice_craft->texture_atlas);
     }

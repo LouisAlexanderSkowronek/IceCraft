@@ -14,7 +14,7 @@ inline static void assign_point_to_vertex(const struct Point *p, struct BlockVer
 }
 
 
-struct Block generate_block(float x, float y, float z, unsigned material_id, struct BlockVertex *vertices, struct TextureBounds *texture_bounds)
+struct Block generate_block(int x, int y, int z, unsigned material_id, struct BlockVertex *vertices, struct TextureBounds *texture_bounds)
 {
     struct Block block;
     block.x = x;

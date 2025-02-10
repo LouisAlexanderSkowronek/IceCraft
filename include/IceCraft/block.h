@@ -17,7 +17,7 @@ struct Player;
 
 struct Block
 {
-    float x, y, z;
+    int x, y, z;
     unsigned texture_id;
     struct BlockVertex *vertices;
 };
@@ -33,7 +33,7 @@ enum BlockFace
     OTHER_OR_NONE
 };
 
-struct Block generate_block(float x, float y, float z, unsigned material_id, struct BlockVertex *vertices, struct TextureBounds *texture_bounds);
+struct Block generate_block(int x, int y, int z, unsigned material_id, struct BlockVertex *vertices, struct TextureBounds *texture_bounds);
 
 
 // Note: Block edge size is assumed to be 1.0f (0.5f in all directions from center).
