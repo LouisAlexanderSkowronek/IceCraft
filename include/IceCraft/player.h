@@ -2,6 +2,7 @@
 
 #include "camera.h"
 #include "chunk.h"
+#include "world.h"
 
 struct Player
 {
@@ -12,4 +13,4 @@ struct Player
 
 void init_player(struct Player *player);
 
-void update_player(struct Player *player, struct Chunk *chunk, double delta);
+void update_player(struct Player *player, struct World *world, double delta);

@@ -7,7 +7,7 @@
 
 #include "IceCraft/block.h"
 
-void init_chunk(float x, float z, struct Chunk *chunk, unsigned block_capacity)
+void init_chunk(int x, int z, struct Chunk *chunk, unsigned block_capacity)
 {
     chunk->placed_blocks = 0;
     chunk->x = x;
@@ -18,7 +18,7 @@ void init_chunk(float x, float z, struct Chunk *chunk, unsigned block_capacity)
     generate_chunk_vao_and_vbo(&chunk->VAO, &chunk->VBO, chunk);
 }
 
-void add_block_to_chunk(float global_x, float global_y, float global_z, unsigned texture_id, struct Chunk *chunk, struct TextureAtlas *texture_atlas)
+void add_block_to_chunk(int global_x, int global_y, int global_z, unsigned texture_id, struct Chunk *chunk, struct TextureAtlas *texture_atlas)
 {
     if (block_does_exist(global_x, global_y, global_z, chunk))
     {
@@ -34,7 +34,7 @@ void add_block_to_chunk(float global_x, float global_y, float global_z, unsigned
         new_blocks = (struct Block*) realloc(chunk->blocks, sizeof(struct Block) * chunk->block_capacity);
         if (!new_blocks)
         {
-            fprintf(stderr, "Memory Error: Failed to double capacity of chunk located at (%f | %f) to %u\n", chunk->x, chunk->z, chunk->block_capacity);
+            fprintf(stderr, "Memory Error: Failed to double capacity of chunk located at (%d | %d) to %u\n", chunk->x, chunk->z, chunk->block_capacity);
             free(chunk->blocks);
             exit(1);
         }
@@ -43,7 +43,7 @@ void add_block_to_chunk(float global_x, float global_y, float global_z, unsigned
         new_vertices = (struct BlockVertex*) realloc(chunk->vertices, BLOCK_VERTICES_SIZE * chunk->block_capacity);
         if (!new_vertices)
         {
-            fprintf(stderr, "Memory Error: Failed to double capacity of chunk located at (%f | %f) to %u\n", chunk->x, chunk->z, chunk->block_capacity);
+            fprintf(stderr, "Memory Error: Failed to double capacity of chunk located at (%d | %d) to %u\n", chunk->x, chunk->z, chunk->block_capacity);
             free(chunk->blocks);
             free(chunk->vertices);
             exit(1);
@@ -68,7 +68,7 @@ void add_block_to_chunk(float global_x, float global_y, float global_z, unsigned
     generate_chunk_vao_and_vbo(&chunk->VAO, &chunk->VBO, chunk);
 }
 
-unsigned get_block_located_at(float x, float y, float z, struct Chunk *chunk)
+unsigned get_block_located_at(int x, int y, int z, struct Chunk *chunk)
 {
     unsigned i;
     for (i = 0; i < chunk->placed_blocks; i++)
@@ -79,7 +79,7 @@ unsigned get_block_located_at(float x, float y, float z, struct Chunk *chunk)
         }
     }
 
-    fprintf(stderr, "Tried to get index of block at (%f | %f | %f) that doesn't exist!\n", x, y, z);
+    fprintf(stderr, "Tried to get index of block at (%d | %d | %d) that doesn't exist!\n", x, y, z);
     exit(EXIT_FAILURE);
 }
 
@@ -119,7 +119,7 @@ void generate_chunk_vao_and_vbo(unsigned *VAO_ptr, unsigned *VBO_ptr, struct Chu
     glBindVertexArray(0);
 }
 
-int block_does_exist(float x, float y, float z, struct Chunk *chunk)
+int block_does_exist(int x, int y, int z, struct Chunk *chunk)
 {
     for (unsigned i = 0; i < chunk->placed_blocks; i++)
     {

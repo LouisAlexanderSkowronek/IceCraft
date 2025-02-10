@@ -121,7 +121,7 @@ void run_ice_craft_main_loop(struct IceCraft *ice_craft)
 
         if (ice_craft->gravity_enabled)
         {
-            update_player(&ice_craft->louis, ice_craft->world.chunk, delta);
+            update_player(&ice_craft->louis, &ice_craft->world, delta);
         }
 
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -170,8 +170,11 @@ void ice_craft_draw_world_with_camera(struct IceCraft *ice_craft, struct Camera 
     glUniformMatrix4fv(ice_craft->world_view_location, 1, GL_FALSE, (float*)ice_craft->view);
     glUniformMatrix4fv(ice_craft->world_projection_location, 1, GL_FALSE, (float*)ice_craft->projection);
 
-    glBindVertexArray(ice_craft->world.chunk->VAO);
-    glDrawArrays(GL_TRIANGLES, 0, ice_craft->world.chunk->placed_blocks*BLOCK_N_VERTICES);
+    for (unsigned i = 0; i < ice_craft->world.n_cached_chunks; i++)
+    {
+        glBindVertexArray((ice_craft->world.cached_chunks+i)->VAO);
+        glDrawArrays(GL_TRIANGLES, 0, (ice_craft->world.cached_chunks+i)->placed_blocks*BLOCK_N_VERTICES);
+    }
 }
 
 
@@ -201,8 +204,8 @@ void ice_craft_draw_hud(struct IceCraft *ice_craft)
 
 void terminate_ice_craft(struct IceCraft *ice_craft)
 {
-    glDeleteVertexArrays(1, &ice_craft->world.chunk->VAO);
-    glDeleteBuffers(1, &ice_craft->world.chunk->VBO);
+    glDeleteVertexArrays(1, &ice_craft->world.cached_chunks->VAO);
+    glDeleteBuffers(1, &ice_craft->world.cached_chunks->VBO);
 
     glDeleteVertexArrays(1, &ice_craft->coordinate_axes.VAO);
     glDeleteBuffers(1, &ice_craft->coordinate_axes.VBO);
@@ -222,7 +225,7 @@ void terminate_ice_craft(struct IceCraft *ice_craft)
         exit(1);
     }
 
-    world_free_chunk(&ice_craft->world);
+    world_free(&ice_craft->world);
 
     free_texture_atlas(&ice_craft->texture_atlas);
 

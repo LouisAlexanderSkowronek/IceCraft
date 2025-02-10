@@ -140,4 +140,5 @@ CMakeFiles/IceCraft.dir/src/player.c.o: \
  /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/chunk.h \
  /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/block.h \
  /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/block_vertex.h \
- /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/texture_atlas.h
+ /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/texture_atlas.h \
+ /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/world.h

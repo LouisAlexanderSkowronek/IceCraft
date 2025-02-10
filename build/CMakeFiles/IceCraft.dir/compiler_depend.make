@@ -1284,6 +1284,7 @@ CMakeFiles/IceCraft.dir/src/player.c.o: /home/louis-alexander-skowronek/Desktop/
   /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/chunk.h \
   /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/player.h \
   /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/texture_atlas.h \
+  /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/world.h \
   /home/louis-alexander-skowronek/Desktop/IceCraft/lib/cglm/include/cglm/aabb2d.h \
   /home/louis-alexander-skowronek/Desktop/IceCraft/lib/cglm/include/cglm/affine-mat.h \
   /home/louis-alexander-skowronek/Desktop/IceCraft/lib/cglm/include/cglm/affine-post.h \

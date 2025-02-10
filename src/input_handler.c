@@ -17,8 +17,7 @@ void process_input(struct IceCraft *ice_craft, float delta)
     {
         ice_craft->player_is_in_world = ICE_WORLD;
         save_world(&ice_craft->world, "../assets/worlds/lobby.s");
-        world_free_chunk(&ice_craft->world);
-        free(ice_craft->world.modifications);
+        world_free(&ice_craft->world);
         init_world(&ice_craft->world);
         generate_ice_world(&ice_craft->world, &ice_craft->texture_atlas);
         load_changes_onto_world(&ice_craft->world, "../assets/worlds/ice_world.s", &ice_craft->texture_atlas);
@@ -28,8 +27,7 @@ void process_input(struct IceCraft *ice_craft, float delta)
     {
         ice_craft->player_is_in_world = LOBBY;
         save_world(&ice_craft->world, "../assets/worlds/ice_world.s");
-        world_free_chunk(&ice_craft->world);
-        free(ice_craft->world.modifications);
+        world_free(&ice_craft->world);
         init_world(&ice_craft->world);
         generate_lobby_world(&ice_craft->world, &ice_craft->texture_atlas);
         load_changes_onto_world(&ice_craft->world, "../assets/worlds/lobby.s", &ice_craft->texture_atlas);
@@ -167,15 +165,28 @@ void handle_key_place(struct IceCraft *ice_craft)
     }
 
     unsigned count;
-    unsigned *selected_blocks = blocks_player_looks_at(ice_craft->louis.camera.position, ice_craft->louis.camera.front, ice_craft->world.chunk, &count);
+    unsigned *selected_blocks;
+    unsigned chunk_idx = 0;
+
+    do {
+        selected_blocks = blocks_player_looks_at(
+            ice_craft->louis.camera.position,
+            ice_craft->louis.camera.front,
+            ice_craft->world.cached_chunks + chunk_idx,
+            &count
+        );
+        chunk_idx++;
+    } while (!count && chunk_idx < ice_craft->world.n_cached_chunks);
+
+    chunk_idx--;  // To prevent off-by-one-error
 
     if (!count)
     {
         return;
     }
 
-    unsigned selected_block_idx = closest_block_to_player(selected_blocks, count, ice_craft->world.chunk, ice_craft->louis.camera.position);
-    struct Block *selected_block = ice_craft->world.chunk->blocks + selected_block_idx;
+    unsigned selected_block_idx = closest_block_to_player(selected_blocks, count, ice_craft->world.cached_chunks+chunk_idx, ice_craft->louis.camera.position);
+    struct Block *selected_block = (ice_craft->world.cached_chunks+chunk_idx)->blocks + selected_block_idx;
     const enum BlockFace face = player_looks_at_face(&ice_craft->louis, selected_block);
 
     int new_x = selected_block->x, new_y = selected_block->y, new_z = selected_block->z;
@@ -210,7 +221,7 @@ void handle_key_place(struct IceCraft *ice_craft)
                 
     ice_craft->remaining_time_block_placement_blocked = 0.5;
 
-    if (new_x >= 0 && new_x <= 15 && new_z <= 0 && new_z >= -15)
+    if (new_x >= 0 && new_x <= 31 && new_z <= 0 && new_z >= -15)
     {
         world_place_block(&ice_craft->world, new_x, new_y, new_z, material_id, &ice_craft->texture_atlas);
     }
@@ -225,12 +236,33 @@ void handle_key_destroy(struct IceCraft *ice_craft)
     }
 
     unsigned count;
-    unsigned *selected_blocks = blocks_player_looks_at(ice_craft->louis.camera.position, ice_craft->louis.camera.front, ice_craft->world.chunk, &count);
+    unsigned *selected_blocks;
+    unsigned selected_chunk_idx = 0;
+    
+    do
+    {
+        selected_blocks = blocks_player_looks_at(
+            ice_craft->louis.camera.position,
+            ice_craft->louis.camera.front,
+            ice_craft->world.cached_chunks + selected_chunk_idx,
+            &count
+        );
+
+        selected_chunk_idx++;
+    } while (!count && selected_chunk_idx < ice_craft->world.n_cached_chunks);
+
+    selected_chunk_idx--;  // To prevent off-by-one error
 
     if (count)
     {
-        unsigned selected_block = closest_block_to_player(selected_blocks, count, ice_craft->world.chunk, ice_craft->louis.camera.position);
-        struct Block *block = ice_craft->world.chunk->blocks + selected_block;
+        unsigned selected_block = closest_block_to_player(
+            selected_blocks,
+            count,
+            ice_craft->world.cached_chunks + selected_chunk_idx,
+            ice_craft->louis.camera.position
+        );
+
+        struct Block *block = (ice_craft->world.cached_chunks + selected_chunk_idx)->blocks + selected_block;
         world_destroy_block_at_position(&ice_craft->world, block->x, block->y, block->z);
         ice_craft->remaining_time_block_breaking_blocked = 0.5;
     }

@@ -143,4 +143,5 @@ CMakeFiles/IceCraft.dir/src/block.c.o: \
  /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/chunk.h \
  /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/player.h \
  /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/camera.h \
+ /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/world.h \
  /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/helper_funcs.h

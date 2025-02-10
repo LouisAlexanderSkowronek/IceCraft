@@ -24,7 +24,8 @@ struct WorldModification
 
 struct World
 {
-    struct Chunk *chunk;
+    struct Chunk *cached_chunks;
+    unsigned n_cached_chunks;
     struct WorldModification *modifications;
     unsigned n_modifications;
     unsigned modification_capacity;
@@ -42,4 +43,4 @@ void generate_ice_world(struct World *world, struct TextureAtlas *texture_atlas)
 void world_place_block(struct World *world, int x, int y, int z, unsigned texture_id, struct TextureAtlas *texture_atlas);
 void world_destroy_block_at_position(struct World *world, int x, int y, int z);
 
-void world_free_chunk(struct World *world);
+void world_free(struct World *world);
