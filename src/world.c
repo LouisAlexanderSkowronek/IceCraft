@@ -189,7 +189,7 @@ void generate_ice_world(struct World *world, struct TextureAtlas *texture_atlas)
         world_free(world);
     }
 
-    world->n_cached_chunks = 2;
+    world->n_cached_chunks = 5;
     world->cached_chunks = malloc(world->n_cached_chunks * sizeof(struct Chunk));
     if (!world->cached_chunks)
     {
@@ -197,18 +197,29 @@ void generate_ice_world(struct World *world, struct TextureAtlas *texture_atlas)
         exit(1);
     }
 
-    for (unsigned i = 0; i < world->n_cached_chunks; i++)
-    {
-        init_chunk(16*i, 0, world->cached_chunks+i, CHUNK_BASE_AREA * 5);
-    }
+    init_chunk(0, 0, world->cached_chunks+0, CHUNK_BASE_AREA * 4);
+    init_chunk(16, 0, world->cached_chunks+1, CHUNK_BASE_AREA * 4);
+    init_chunk(0, -16, world->cached_chunks+2, CHUNK_BASE_AREA * 4);
+    init_chunk(-16, 0, world->cached_chunks+3, CHUNK_BASE_AREA * 4);
 
     for (int z = 0; z < 16; z++)
     {
         for (int y = 0; y < 3; y++)
         {
-            for (int x = 0; x < 16 * world->n_cached_chunks; x++)
+            for (int x = 0; x < 16 * 3; x++)
             {
-                add_block_to_chunk(x, y, -z, 6, world->cached_chunks + x/16, texture_atlas);
+                add_block_to_chunk(x-16, y, -z, 6, world->cached_chunks + x/16, texture_atlas);
+            }
+        }
+    }
+
+    for (int z = 0; z < 16 * 2; z++)
+    {
+        for (int y = 0; y < 3; y++)
+        {
+            for (int x = 0; x < 16; x++)
+            {
+                add_block_to_chunk(x, y, -z, 6, world->cached_chunks + 2, texture_atlas);
             }
         }
     }
@@ -217,6 +228,46 @@ void generate_ice_world(struct World *world, struct TextureAtlas *texture_atlas)
 
 void world_place_block(struct World *world, int x, int y, int z, unsigned texture_id, struct TextureAtlas *texture_atlas)
 {
+    printf("(%d | %d | %d)\n", x, y, z);
+
+    if (x >= 0 && x/16 == 0 && z/16 == 0)
+    {
+        puts("This block belongs to chunk 0");
+    } else if (x/16 == 1 && z/16 == 0)
+    {
+        puts("This block belongs to chunk 1");
+    } else if (x/16 == 0 && z/16 == -1)
+    {
+        puts("This block belongs to chunk 2");
+    } else if (x/16 == 0 && z/16 == 0 && x < 0)
+    {
+        puts("This block belongs to chunk 3");
+    } else
+    {
+        puts("ohoh ...");
+        return;
+    }
+
+    if (world->n_cached_chunks == 1)
+    {
+        if (x < 0 || x/16 > 0 || z > 0 || z/16 != 0)
+        {
+            puts("Nope, darling ...");
+            return;  // Can't place block outside world
+        }
+    } else if (world->n_cached_chunks == 4)
+    {
+        if (x < -16 || x/16 > 1 || z > 0 || z/16 > 1)
+        {
+            puts("Nope, darling, not even in Ice World yet ...");
+            return;
+        }
+    }else
+    {
+        puts("From world.c in world_place_block method: This is not supported yet ...");
+        return;
+    }
+
     if (world->n_modifications == world->modification_capacity)
     {
         world->modification_capacity *= 2;

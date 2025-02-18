@@ -221,10 +221,7 @@ void handle_key_place(struct IceCraft *ice_craft)
                 
     ice_craft->remaining_time_block_placement_blocked = 0.5;
 
-    if (new_x >= 0 && new_x <= 31 && new_z <= 0 && new_z >= -15)
-    {
-        world_place_block(&ice_craft->world, new_x, new_y, new_z, material_id, &ice_craft->texture_atlas);
-    }
+    world_place_block(&ice_craft->world, new_x, new_y, new_z, material_id, &ice_craft->texture_atlas);
 }
 
 

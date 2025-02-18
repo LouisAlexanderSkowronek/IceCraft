@@ -79,6 +79,7 @@ CMakeFiles/IceCraft.dir/src/block.c.o: /home/louis-alexander-skowronek/Desktop/I
   /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/player.h \
   /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/point.h \
   /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/texture_atlas.h \
+  /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/world.h \
   /home/louis-alexander-skowronek/Desktop/IceCraft/lib/cglm/include/cglm/aabb2d.h \
   /home/louis-alexander-skowronek/Desktop/IceCraft/lib/cglm/include/cglm/affine-mat.h \
   /home/louis-alexander-skowronek/Desktop/IceCraft/lib/cglm/include/cglm/affine-post.h \
@@ -1667,8 +1668,6 @@ CMakeFiles/IceCraft.dir/src/world.c.o: /home/louis-alexander-skowronek/Desktop/I
 
 /usr/include/x86_64-linux-gnu/asm/posix_types.h:
 
-/home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/world.h:
-
 /home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/input_handler.h:
 
 /home/louis-alexander-skowronek/Desktop/IceCraft/src/ice_craft.c:
@@ -1740,6 +1739,8 @@ CMakeFiles/IceCraft.dir/src/world.c.o: /home/louis-alexander-skowronek/Desktop/I
 /home/louis-alexander-skowronek/Desktop/IceCraft/lib/cglm/include/cglm/vec2-ext.h:
 
 /home/louis-alexander-skowronek/Desktop/IceCraft/lib/cglm/include/cglm/types.h:
+
+/home/louis-alexander-skowronek/Desktop/IceCraft/lib/cglm/include/cglm/simd/x86.h:
 
 /usr/include/x86_64-linux-gnu/bits/waitstatus.h:
 
@@ -1923,6 +1924,8 @@ CMakeFiles/IceCraft.dir/src/world.c.o: /home/louis-alexander-skowronek/Desktop/I
 
 /home/louis-alexander-skowronek/Desktop/IceCraft/lib/cglm/include/cglm/clipspace/ortho_rh_no.h:
 
+/home/louis-alexander-skowronek/Desktop/IceCraft/include/IceCraft/world.h:
+
 /usr/include/x86_64-linux-gnu/bits/types/__mbstate_t.h:
 
 /usr/include/x86_64-linux-gnu/bits/types.h:
@@ -1946,8 +1949,6 @@ CMakeFiles/IceCraft.dir/src/world.c.o: /home/louis-alexander-skowronek/Desktop/I
 /usr/include/x86_64-linux-gnu/bits/struct_mutex.h:
 
 /home/louis-alexander-skowronek/Desktop/IceCraft/lib/cglm/include/cglm/box.h:
-
-/home/louis-alexander-skowronek/Desktop/IceCraft/lib/cglm/include/cglm/simd/x86.h:
 
 /usr/include/x86_64-linux-gnu/gnu/stubs-64.h:
 

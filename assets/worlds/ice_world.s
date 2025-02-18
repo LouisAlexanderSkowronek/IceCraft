@@ -1,0 +1,21 @@
+place 0, 2, -3, 0
+place 2, 3, -3, 0
+place 1, 3, -3, 0
+place 7, 3, -3, 0
+place 12, 3, -5, 0
+place 3, 3, -2, 0
+place -6, 3, -5, 0
+place -9, 3, -6, 0
+place -11, 3, -6, 0
+place 3, 2, -7, 0
+place 5, 3, -8, 0
+place 6, 3, -9, 0
+place 6, 3, -7, 0
+place 5, 3, -6, 0
+place 4, 3, -7, 0
+destroy 3, 2, -7
+place 3, 3, -17, 0
+place 4, 3, -19, 0
+place 18, 3, -11, 0
+place 20, 3, -9, 0
+place 11, 1, 0, 0
