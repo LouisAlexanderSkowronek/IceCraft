@@ -20,7 +20,7 @@ void init_ice_craft(struct IceCraft *ice_craft)
 {
     ice_craft->gravity_enabled = 1;
     ice_craft->player_is_in_world = LOBBY;
-    ice_craft->player_can_go_to_ice_world = 0;
+    ice_craft->player_can_go_to_ice_world = 1;
 
     init_glfw();
 

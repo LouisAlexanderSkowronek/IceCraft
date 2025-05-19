@@ -228,26 +228,6 @@ void generate_ice_world(struct World *world, struct TextureAtlas *texture_atlas)
 
 void world_place_block(struct World *world, int x, int y, int z, unsigned texture_id, struct TextureAtlas *texture_atlas)
 {
-    printf("(%d | %d | %d)\n", x, y, z);
-
-    if (x >= 0 && x/16 == 0 && z/16 == 0)
-    {
-        puts("This block belongs to chunk 0");
-    } else if (x/16 == 1 && z/16 == 0)
-    {
-        puts("This block belongs to chunk 1");
-    } else if (x/16 == 0 && z/16 == -1)
-    {
-        puts("This block belongs to chunk 2");
-    } else if (x/16 == 0 && z/16 == 0 && x < 0)
-    {
-        puts("This block belongs to chunk 3");
-    } else
-    {
-        puts("ohoh ...");
-        return;
-    }
-
     if (world->n_cached_chunks == 1)
     {
         if (x < 0 || x/16 > 0 || z > 0 || z/16 != 0)

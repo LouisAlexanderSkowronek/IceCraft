@@ -66,3 +66,10 @@ place 0, 2, -15, 0
 place 0, 2, -15, 0
 place 0, 2, -15, 0
 place 0, 3, -2, 0
+destroy 4, 3, 0
+destroy 13, 4, -3
+place 8, 4, -9, 6
+place 2, 4, -4, 0
+place 3, 3, -3, 0
+place 5, 4, -3, 0
+place 7, 4, -6, 0
