@@ -60,7 +60,7 @@ void init_ice_craft(struct IceCraft *ice_craft)
         load_changes_onto_world(&ice_craft->world, "../assets/worlds/lobby.s", &ice_craft->texture_atlas);
     } else if (ice_craft->player_is_in_world == ICE_WORLD)
     {
-        generate_ice_world(&ice_craft->world, &ice_craft->texture_atlas);
+        generate_ice_world(&ice_craft->world, &ice_craft->texture_atlas, ice_craft->louis.camera.position);
         load_changes_onto_world(&ice_craft->world, "../assets/worlds/ice_world.s", &ice_craft->texture_atlas);
     } else
     {
@@ -124,6 +124,8 @@ void run_ice_craft_main_loop(struct IceCraft *ice_craft)
         {
             update_player(&ice_craft->louis, &ice_craft->world, delta);
         }
+
+        world_update_cached_chunks(&ice_craft->world, ice_craft->louis.camera.position, ice_craft->render_distance, &ice_craft->texture_atlas);
 
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

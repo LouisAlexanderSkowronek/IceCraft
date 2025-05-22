@@ -182,12 +182,17 @@ void generate_lobby_world(struct World *world, struct TextureAtlas *texture_atla
 }
 
 
-void generate_ice_world(struct World *world, struct TextureAtlas *texture_atlas)
+void generate_ice_world(struct World *world, struct TextureAtlas *texture_atlas, vec3 player_position)
 {
+    const unsigned render_distance = 1;  // Not a real parameter yet!
+    printf("Warning: Incomplete implementation of generate_ice_world!\n");
+
     if (world->cached_chunks)
     {
         world_free(world);
     }
+
+
 
     world->n_cached_chunks = 5;
     world->cached_chunks = malloc(world->n_cached_chunks * sizeof(struct Chunk));
@@ -197,30 +202,71 @@ void generate_ice_world(struct World *world, struct TextureAtlas *texture_atlas)
         exit(1);
     }
 
-    init_chunk(0, 0, world->cached_chunks+0, CHUNK_BASE_AREA * 4);
-    init_chunk(16, 0, world->cached_chunks+1, CHUNK_BASE_AREA * 4);
-    init_chunk(0, -16, world->cached_chunks+2, CHUNK_BASE_AREA * 4);
-    init_chunk(-16, 0, world->cached_chunks+3, CHUNK_BASE_AREA * 4);
-    init_chunk(0, 16, world->cached_chunks+4, CHUNK_BASE_AREA * 4);
+    int chunk_x = player_position[0] / 16;
+    int chunk_z = player_position[2] / 16;
 
+    init_chunk(16*chunk_x +   0, 16*chunk_z +   0, world->cached_chunks+0, CHUNK_BASE_AREA * 4);  // A
+    init_chunk(16*chunk_x +  16, 16*chunk_z +   0, world->cached_chunks+1, CHUNK_BASE_AREA * 4);  // B
+    init_chunk(16*chunk_x +   0, 16*chunk_z + -16, world->cached_chunks+2, CHUNK_BASE_AREA * 4);  // C
+    init_chunk(16*chunk_x + -16, 16*chunk_z +   0, world->cached_chunks+3, CHUNK_BASE_AREA * 4);  // D
+    init_chunk(16*chunk_x +   0, 16*chunk_z +  16, world->cached_chunks+4, CHUNK_BASE_AREA * 4);  // E
+
+    // A
     for (int z = 0; z < 16; z++)
-    {
-        for (int y = 0; y < 3; y++)
-        {
-            for (int x = 0; x < 16 * 3; x++)
-            {
-                add_block_to_chunk(x-16, y, -z, 6, world->cached_chunks + x/16, texture_atlas);
-            }
-        }
-    }
-
-    for (int z = 0; z < 16 * 3; z++)
     {
         for (int y = 0; y < 3; y++)
         {
             for (int x = 0; x < 16; x++)
             {
-                add_block_to_chunk(x, y, -z+16, 6, world->cached_chunks + 2, texture_atlas);
+                add_block_to_chunk(chunk_x*16 + x, y, chunk_z*16 - z, 6, world->cached_chunks + 0, texture_atlas);
+            }
+        }
+    }
+
+    // B
+    for (int z = 0; z < 16; z++)
+    {
+        for (int y = 0; y < 3; y++)
+        {
+            for (int x = 0; x < 16; x++)
+            {
+                add_block_to_chunk(chunk_x*16 + x+16, y, chunk_z*16 - z, 6, world->cached_chunks + 1, texture_atlas);
+            }
+        }
+    }
+
+    // C
+    for (int z = 0; z < 16; z++)
+    {
+        for (int y = 0; y < 3; y++)
+        {
+            for (int x = 0; x < 16; x++)
+            {
+                add_block_to_chunk(chunk_x*16 + x, y, chunk_z*16 - z+16, 6, world->cached_chunks + 2, texture_atlas);
+            }
+        }
+    }
+
+    // D
+    for (int z = 0; z < 16; z++)
+    {
+        for (int y = 0; y < 3; y++)
+        {
+            for (int x = 0; x < 16; x++)
+            {
+                add_block_to_chunk(chunk_x*16 + x-16, y, chunk_z*16 - z, 6, world->cached_chunks + 3, texture_atlas);
+            }
+        }
+    }
+
+    // E
+    for (int z = 0; z < 16; z++)
+    {
+        for (int y = 0; y < 3; y++)
+        {
+            for (int x = 0; x < 16; x++)
+            {
+                add_block_to_chunk(chunk_x*16 + x, y, chunk_z*16 - z-16, 6, world->cached_chunks + 4, texture_atlas);
             }
         }
     }
@@ -305,6 +351,62 @@ void world_destroy_block_at_position(struct World *world, int x, int y, int z)
         {
             remove_block_from_chunk(i, world->cached_chunks + x/16);
         }
+    }
+}
+
+static unsigned find_chunk_at_x_z_in_world_cache(int x, int z, struct World *world, int *found)
+{
+    for (unsigned i = 0; i < world->n_cached_chunks; i++)
+    {
+        if (world->cached_chunks[i].x == x && world->cached_chunks[i].z == z)
+        {
+            *found = 1;
+            return i;
+        }
+    }
+
+    *found = 0;
+    return 0;
+}
+
+
+void world_update_cached_chunks(struct World *world, vec3 player_position, unsigned render_distance, struct TextureAtlas *texture_atlas)
+{
+    int chunk_x = player_position[0] / 16;
+    int chunk_z = player_position[2] / 16;
+
+    int update_required = 0;
+
+    int rdi = (int) render_distance;
+
+    for (int z = chunk_z - rdi; z <= chunk_z + rdi; z++)
+    {
+        for (int x = chunk_x - rdi; x <= chunk_x + rdi; x++)
+        {
+            if ((x-chunk_x)*(x-chunk_x) + (z-chunk_z)*(z-chunk_z) <= rdi*rdi)  // sqrt(x*x + z*z) <= rd*rd, but without sqrt ;)
+            {
+                int found;
+                unsigned idx = find_chunk_at_x_z_in_world_cache(x*16, z*16, world, &found);
+                if (!found)
+                {
+                    update_required = 1;
+                    goto post_loop;
+                }
+            }
+        }
+    }
+
+post_loop:
+
+    if (update_required)
+    {
+        printf("Huhuuuuhhhhhhhh\n");
+        // Assuming player to be in IceWorld!!!
+        save_world(world, "../assets/worlds/ice_world.s");
+        world_free(world);
+        init_world(world);
+        generate_ice_world(world, texture_atlas, player_position);
+        load_changes_onto_world(world, "../assets/worlds/ice_world.s", texture_atlas);
     }
 }
 

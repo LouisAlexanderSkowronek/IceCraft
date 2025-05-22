@@ -19,7 +19,7 @@ void process_input(struct IceCraft *ice_craft, float delta)
         save_world(&ice_craft->world, "../assets/worlds/lobby.s");
         world_free(&ice_craft->world);
         init_world(&ice_craft->world);
-        generate_ice_world(&ice_craft->world, &ice_craft->texture_atlas);
+        generate_ice_world(&ice_craft->world, &ice_craft->texture_atlas, ice_craft->louis.camera.position);
         load_changes_onto_world(&ice_craft->world, "../assets/worlds/ice_world.s", &ice_craft->texture_atlas);
     }
 
