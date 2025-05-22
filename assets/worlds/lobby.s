@@ -1,75 +1,8 @@
-place 0, 3, -2, 0
-place 0, 3, -1, 0
-place 0, 3, -1, 0
-place 0, 4, -2, 0
-place 0, 4, 0, 0
-place 0, 2, 0, 0
-place 3, 2, 0, 0
-place 3, 2, 0, 0
-place 3, 2, 0, 0
-place 4, 2, 0, 0
-place 5, 2, 0, 0
-place 6, 2, 0, 0
-place 7, 1, 0, 0
-place 13, 4, -3, 0
-place 15, 3, -1, 0
-place 15, 3, -1, 0
-place 15, 3, -1, 0
-place 15, 3, -2, 0
-place 15, 3, -2, 0
-place 15, 3, -1, 0
-place 15, 4, 0, 0
-place 15, 4, -1, 0
-place 14, 4, -2, 0
-place 15, 3, -3, 0
-place 15, 4, -3, 0
-place 15, 4, -5, 0
-place 8, 2, 0, 0
-place 5, 2, 0, 0
-place 4, 2, 0, 0
-destroy 6, 3, 0
-destroy 6, 2, 0
-place 6, 2, 0, 0
-place 6, 1, 0, 0
-place 6, 1, 0, 0
-place 6, 1, 0, 0
-destroy 6, 2, 0
-place 6, 2, 0, 0
-destroy 6, 2, 0
-destroy 6, 1, 0
-place 6, 1, 0, 0
-place 6, 0, 0, 0
-place 6, 0, 0, 0
-place 6, 0, 0, 0
-place 6, 0, 0, 0
-place 6, 0, 0, 0
-place 6, -1, 0, 0
-place 6, -1, 0, 0
-place 6, -2, 0, 0
-place 6, -3, 0, 0
-place 6, -4, 0, 0
-place 6, -5, 0, 0
-place 6, -5, 0, 0
-place 6, -5, 0, 0
-place 6, -6, 0, 0
-place 6, -6, 0, 0
-place 6, -6, 0, 0
-place 9, 2, -15, 0
-place 7, 2, -15, 0
-place 5, 2, -15, 0
-place 3, 2, -15, 0
-place 2, 2, -15, 0
-place 0, 2, -15, 0
-place 0, 2, -15, 0
-place 0, 2, -15, 0
-place 0, 2, -15, 0
-place 0, 2, -15, 0
-place 0, 2, -15, 0
-place 0, 3, -2, 0
-destroy 4, 3, 0
-destroy 13, 4, -3
-place 8, 4, -9, 6
-place 2, 4, -4, 0
-place 3, 3, -3, 0
-place 5, 4, -3, 0
-place 7, 4, -6, 0
+destroy 3, 2, -7
+destroy 0, 2, -3
+destroy 0, 2, -3
+destroy 1, 2, -4
+destroy 2, 2, -5
+destroy 9, 2, -9
+destroy 9, 2, -9
+destroy 9, 2, -9

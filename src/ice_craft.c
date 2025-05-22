@@ -19,8 +19,9 @@
 void init_ice_craft(struct IceCraft *ice_craft)
 {
     ice_craft->gravity_enabled = 1;
-    ice_craft->player_is_in_world = LOBBY;
+    ice_craft->player_is_in_world = ICE_WORLD;
     ice_craft->player_can_go_to_ice_world = 1;
+    ice_craft->render_distance = 1;
 
     init_glfw();
 
@@ -79,7 +80,7 @@ void init_ice_craft(struct IceCraft *ice_craft)
     ice_craft->coord_axes_view_location  = glGetUniformLocation(ice_craft->coord_axes_shader_program, "view");
     ice_craft->coord_axes_projection_location = glGetUniformLocation(ice_craft->coord_axes_shader_program, "projection");
 
-    glm_perspective(glm_rad(45.0f), ((float) WINDOW_WIDTH) / ((float) WINDOW_HEIGHT), 0.1f, 100.0f, ice_craft->projection);
+    glm_perspective(glm_rad(45.0f), ((float) WINDOW_WIDTH) / ((float) WINDOW_HEIGHT), 0.1f, 2*ice_craft->render_distance*16.0f + 16.0f, ice_craft->projection);
 
     glBindTexture(GL_TEXTURE_2D, ice_craft->texture_atlas.texture_id);
 

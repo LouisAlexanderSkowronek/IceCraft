@@ -201,6 +201,7 @@ void generate_ice_world(struct World *world, struct TextureAtlas *texture_atlas)
     init_chunk(16, 0, world->cached_chunks+1, CHUNK_BASE_AREA * 4);
     init_chunk(0, -16, world->cached_chunks+2, CHUNK_BASE_AREA * 4);
     init_chunk(-16, 0, world->cached_chunks+3, CHUNK_BASE_AREA * 4);
+    init_chunk(0, 16, world->cached_chunks+4, CHUNK_BASE_AREA * 4);
 
     for (int z = 0; z < 16; z++)
     {
@@ -213,13 +214,13 @@ void generate_ice_world(struct World *world, struct TextureAtlas *texture_atlas)
         }
     }
 
-    for (int z = 0; z < 16 * 2; z++)
+    for (int z = 0; z < 16 * 3; z++)
     {
         for (int y = 0; y < 3; y++)
         {
             for (int x = 0; x < 16; x++)
             {
-                add_block_to_chunk(x, y, -z, 6, world->cached_chunks + 2, texture_atlas);
+                add_block_to_chunk(x, y, -z+16, 6, world->cached_chunks + 2, texture_atlas);
             }
         }
     }

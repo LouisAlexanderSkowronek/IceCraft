@@ -6,5 +6,5 @@ C_DEFINES =
 
 C_INCLUDES = -I/home/louis-alexander-skowronek/Desktop/IceCraft/lib/glad/include -I/home/louis-alexander-skowronek/Desktop/IceCraft/lib/cglm/include -I/home/louis-alexander-skowronek/Desktop/IceCraft/lib/stb -I/home/louis-alexander-skowronek/Desktop/IceCraft/include -I/home/louis-alexander-skowronek/Desktop/IceCraft/lib/glfw/include
 
-C_FLAGS = 
+C_FLAGS = -g
 
