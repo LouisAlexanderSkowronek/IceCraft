@@ -64,6 +64,14 @@ void add_block_to_chunk(int global_x, int global_y, int global_z, unsigned textu
     );
 
     chunk->placed_blocks++;
+}
+
+void chunk_place_block(struct Chunk *chunk, int x, int y, int z, unsigned texture_id, struct TextureAtlas *texture_atlas)
+{
+    add_block_to_chunk(x, y, z, texture_id, chunk, texture_atlas);
+
+    glDeleteVertexArrays(1, &chunk->VAO);
+    glDeleteBuffers(1, &chunk->VBO);
 
     generate_chunk_vao_and_vbo(&chunk->VAO, &chunk->VBO, chunk);
 }

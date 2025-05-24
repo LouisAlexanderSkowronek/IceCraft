@@ -179,20 +179,17 @@ void generate_lobby_world(struct World *world, struct TextureAtlas *texture_atla
             add_block_to_chunk(x, 3, -z, 4, world->cached_chunks, texture_atlas);
         }
     }
+
+    generate_chunk_vao_and_vbo(&world->cached_chunks->VAO, &world->cached_chunks->VBO, world->cached_chunks);
 }
 
 
 void generate_ice_world(struct World *world, struct TextureAtlas *texture_atlas, vec3 player_position)
 {
-    const unsigned render_distance = 1;  // Not a real parameter yet!
-    printf("Warning: Incomplete implementation of generate_ice_world!\n");
-
     if (world->cached_chunks)
     {
         world_free(world);
     }
-
-
 
     world->n_cached_chunks = 5;
     world->cached_chunks = malloc(world->n_cached_chunks * sizeof(struct Chunk));
@@ -269,6 +266,12 @@ void generate_ice_world(struct World *world, struct TextureAtlas *texture_atlas,
                 add_block_to_chunk(chunk_x*16 + x, y, chunk_z*16 - z-16, 6, world->cached_chunks + 4, texture_atlas);
             }
         }
+    }
+
+    for (unsigned i = 0; i < world->n_cached_chunks; i++)
+    {
+        struct Chunk *chunk = world->cached_chunks + i;
+        generate_chunk_vao_and_vbo(&chunk->VAO, &chunk->VBO, chunk);
     }
 }
 
@@ -400,8 +403,7 @@ post_loop:
 
     if (update_required)
     {
-        printf("Huhuuuuhhhhhhhh\n");
-        // Assuming player to be in IceWorld!!!
+        //printf("Warning from world_update_cached_chunks: Assuming player is in IceWorld!\n");
         save_world(world, "../assets/worlds/ice_world.s");
         world_free(world);
         init_world(world);
@@ -417,6 +419,8 @@ void world_free(struct World *world)
     {
         free((world->cached_chunks+i)->blocks);
         free((world->cached_chunks+i)->vertices);
+        glDeleteVertexArrays(1, &world->cached_chunks[i].VAO);
+        glDeleteBuffers(1, &world->cached_chunks[i].VBO);
     }
 
     free(world->cached_chunks);

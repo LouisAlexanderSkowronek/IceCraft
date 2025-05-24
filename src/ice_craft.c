@@ -207,9 +207,6 @@ void ice_craft_draw_hud(struct IceCraft *ice_craft)
 
 void terminate_ice_craft(struct IceCraft *ice_craft)
 {
-    glDeleteVertexArrays(1, &ice_craft->world.cached_chunks->VAO);
-    glDeleteBuffers(1, &ice_craft->world.cached_chunks->VBO);
-
     glDeleteVertexArrays(1, &ice_craft->coordinate_axes.VAO);
     glDeleteBuffers(1, &ice_craft->coordinate_axes.VBO);
 

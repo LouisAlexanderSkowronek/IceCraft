@@ -52,12 +52,14 @@ void process_input(struct IceCraft *ice_craft, float delta)
 
     if (glfwGetKey(ice_craft->window, GLFW_KEY_P) == GLFW_PRESS)
     {
-        handle_key_place(ice_craft);
+        printf("Placing blocks is not available right now but it'll come back soon!\n");
+        //handle_key_place(ice_craft);
     }
 
     if (glfwGetKey(ice_craft->window, GLFW_KEY_Y) == GLFW_PRESS)
     {
-        handle_key_destroy(ice_craft);
+        printf("Right now you don't destroy anything! Muhahahahahahaaaah\n");
+        //handle_key_destroy(ice_craft);
     }
 
 
@@ -249,6 +251,8 @@ void handle_key_destroy(struct IceCraft *ice_craft)
     } while (!count && selected_chunk_idx < ice_craft->world.n_cached_chunks);
 
     selected_chunk_idx--;  // To prevent off-by-one error
+
+    printf("Selected chunk idx: %u\n", selected_chunk_idx);
 
     if (count)
     {
